@@ -28,6 +28,13 @@
     "_name": "_749dd880"
   },
   {
+    "name": "laboratory",
+    "path": "/laboratory",
+    "component": "/Users/asani/Sites/localhost/hms-fe/pages/laboratory/index.vue",
+    "chunkName": "pages/laboratory/index",
+    "_name": "_19c1cd46"
+  },
+  {
     "name": "medicine",
     "path": "/medicine",
     "component": "/Users/asani/Sites/localhost/hms-fe/pages/medicine/index.vue",

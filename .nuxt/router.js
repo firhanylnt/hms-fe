@@ -7,6 +7,7 @@ const _703294c2 = () => interopDefault(import('../pages/appointment/index.vue' /
 const _c91291be = () => interopDefault(import('../pages/base.vue' /* webpackChunkName: "pages/base" */))
 const _4d8c3868 = () => interopDefault(import('../pages/bloods/index.vue' /* webpackChunkName: "pages/bloods/index" */))
 const _749dd880 = () => interopDefault(import('../pages/ipd/index.vue' /* webpackChunkName: "pages/ipd/index" */))
+const _19c1cd46 = () => interopDefault(import('../pages/laboratory/index.vue' /* webpackChunkName: "pages/laboratory/index" */))
 const _2890b5e6 = () => interopDefault(import('../pages/medicine/index.vue' /* webpackChunkName: "pages/medicine/index" */))
 const _07c3ba6e = () => interopDefault(import('../pages/nurses/index.vue' /* webpackChunkName: "pages/nurses/index" */))
 const _624be83e = () => interopDefault(import('../pages/patients/index.vue' /* webpackChunkName: "pages/patients/index" */))
@@ -85,6 +86,10 @@ export const routerOptions = {
     path: "/ipd",
     component: _749dd880,
     name: "ipd"
+  }, {
+    path: "/laboratory",
+    component: _19c1cd46,
+    name: "laboratory"
   }, {
     path: "/medicine",
     component: _2890b5e6,

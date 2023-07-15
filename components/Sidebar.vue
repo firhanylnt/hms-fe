@@ -282,6 +282,12 @@ export default {
                     </nuxt-link>
                 </li>
                 <li>
+                    <nuxt-link to="/laboratory" class="side-nav-link-ref">
+                        <i class="fas fa-flask"></i>
+                        <span>Laboratory</span>
+                    </nuxt-link>
+                </li>
+                <li>
                     <nuxt-link to="/bloods" class="side-nav-link-ref">
                         <i class="mdi mdi-water"></i>
                         <span>Blood Banks</span>

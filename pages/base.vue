@@ -19,9 +19,13 @@ export default {
 
 <template>
 <div>
-    <PageHeader :title="title" />
-
-    
+    <div class="row justify-content-center">
+        <div class="col-sm-4">
+            <div class="error-img">
+                <img src="~/assets/images/404-error.png" alt class="img-fluid mx-auto d-block" />
+            </div>
+        </div>
+    </div>
 </div>
 </template>
 
