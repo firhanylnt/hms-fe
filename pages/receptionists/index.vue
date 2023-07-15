@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            title: "Users",
+            title: "receptionists",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -27,32 +27,27 @@ export default {
             fields: [
                 {
                     key: "id",
-                    label: "Users ID",
+                    label: "Receptionist ID",
                     sortable: true,
                 },
                 {
-                    key: "username",
-                    label: "Username",
+                    key: "first_name",
+                    label: "First Name",
                     sortable: true,
                 },
                 {
-                    key: "email",
-                    label: "Email",
+                    key: "last_name",
+                    label: "Last Name",
                     sortable: true,
                 },
                 {
-                    key: "role",
-                    label: "Role",
+                    key: "gender",
+                    label: "Gender",
                     sortable: true,
                 },
                 {
-                    key: "created_at",
-                    label: "Created At",
-                    sortable: true,
-                },
-                {
-                    key: "updated_at",
-                    label: "Updated At",
+                    key: "dob",
+                    label: "Date of Birth",
                     sortable: true,
                 },
                 {
@@ -76,7 +71,7 @@ export default {
     methods: {
         async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/users`
+                const url = `${process.env.apiBaseUrl}/receptionists`
                 await this.$axios.$get(url)
                 .then((res) => {
                     console.log(res);
@@ -96,11 +91,11 @@ export default {
         },
 
         create(){
-            this.$router.push(`/users/create`)
+            this.$router.push(`/receptionists/create`)
         },
 
         move(id) {
-            this.$router.push(`/users/${id}/edit`)
+            this.$router.push(`/receptionists/${id}/edit`)
         },
 
         confirm(id) {
@@ -114,10 +109,10 @@ export default {
                 confirmButtonText: "Yes, delete it!"
             }).then(async result => {
                 if (result.value) {
-                    const url = `${process.env.apiBaseUrl}/users/delete/${id}`
+                    const url = `${process.env.apiBaseUrl}/receptionists/delete/${id}`
                     await this.$axios.$post(url)
                     .then(() => {
-                        Swal.fire("Deleted!", "User has been deleted.", "success");
+                        Swal.fire("Deleted!", "Receptionist has been deleted.", "success");
                         this.get_data()
                     })
                 }
@@ -141,7 +136,7 @@ export default {
                             <div>
                                 <b-button variant="success" @click="create">
                                     <i class="mdi mdi-plus-thick me-2"></i>
-                                    Create User
+                                    Create Receptionist
                                 </b-button>
                             </div>
                         </div>

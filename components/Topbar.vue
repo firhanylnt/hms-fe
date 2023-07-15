@@ -143,8 +143,7 @@ export default {
 
             <b-dropdown class="d-inline-block" toggle-class="header-item" right variant="white">
                 <template v-slot:button-content>
-                    <img class="rounded-circle header-profile-user" src="~/assets/images/users/avatar-4.jpg" alt="Header Avatar" />
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">{{ $t('navbar.dropdown.marcus.text')}}</span>
+                    <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">Administrator</span>
                     <i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
                 </template>
 

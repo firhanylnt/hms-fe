@@ -227,8 +227,22 @@ export default {
                     </nuxt-link>
                 </li>
                 <li>
+                    <nuxt-link to="/appointment" class="side-nav-link-ref">
+                        <!-- <i class="fas fa-home"></i> -->
+                        <i class="uil uil-clipboard-notes"></i>
+                        <span>Appointment</span>
+                    </nuxt-link>
+                </li>
+                <li>
+                    <nuxt-link to="/ipd" class="side-nav-link-ref">
+                        <!-- <i class="fas fa-home"></i> -->
+                        <i class="uil uil-medical-drip"></i>
+                        <span>IPD</span>
+                    </nuxt-link>
+                </li>
+                <li>
                     <a href="javascript:void(0);" class="is-parent has-dropdown">
-                        <i class="uil uil-user"></i>
+                        <i class="mdi mdi-doctor"></i>
                         <span class="pt-2">Doctors</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
@@ -236,7 +250,7 @@ export default {
                             <nuxt-link to="/doctors/specialization" class="side-nav-link-ref">Specialization</nuxt-link>
                         </li>
                         <li>
-                            <nuxt-link to="/doctors/manage" class="side-nav-link-ref">List Doctors</nuxt-link>
+                            <nuxt-link to="/doctors/list" class="side-nav-link-ref">List Doctors</nuxt-link>
                         </li>
                     </ul>
                 </li>
@@ -248,24 +262,29 @@ export default {
                     </nuxt-link>
                 </li>
                 <li>
-                    <nuxt-link to="/appointment" class="side-nav-link-ref">
-                        <!-- <i class="fas fa-home"></i> -->
-                        <i class="uil uil-clipboard-notes"></i>
-                        <span>Appointment</span>
-                    </nuxt-link>
-                </li>
-                <li>
-                    <nuxt-link to="/users" class="side-nav-link-ref">
-                        <!-- <i class="fas fa-home"></i> -->
-                        <i class="uil uil-users-alt"></i>
-                        <span>Users</span>
-                    </nuxt-link>
-                </li>
-                <li>
-                    <nuxt-link to="/bed-management" class="side-nav-link-ref">
-                        <!-- <i class="fas fa-home"></i> -->
+                    <a href="javascript:void(0);" class="is-parent has-dropdown">
                         <i class="uil uil-bed"></i>
-                        <span>Bed Management</span>
+                        <span class="pt-2">Bed Management</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li>
+                            <nuxt-link to="/bed-management/type" class="side-nav-link-ref">Type</nuxt-link>
+                        </li>
+                        <li>
+                            <nuxt-link to="/bed-management/room" class="side-nav-link-ref">Room</nuxt-link>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <nuxt-link to="/medicine" class="side-nav-link-ref">
+                        <i class="uil uil-capsule"></i>
+                        <span>Medicines</span>
+                    </nuxt-link>
+                </li>
+                <li>
+                    <nuxt-link to="/bloods" class="side-nav-link-ref">
+                        <i class="mdi mdi-water"></i>
+                        <span>Blood Banks</span>
                     </nuxt-link>
                 </li>
                 <li>
@@ -283,8 +302,21 @@ export default {
                     </nuxt-link>
                 </li>
                 <li>
-                    <nuxt-link to="/report" class="side-nav-link-ref">
+                    <nuxt-link to="/receptionists" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
+                        <i class="uil uil-book-reader"></i>
+                        <span>Receptionists</span>
+                    </nuxt-link>
+                </li>
+                <li>
+                    <nuxt-link to="/users" class="side-nav-link-ref">
+                        <!-- <i class="fas fa-home"></i> -->
+                        <i class="uil uil-users-alt"></i>
+                        <span>Users</span>
+                    </nuxt-link>
+                </li>
+                <!-- <li>
+                    <nuxt-link to="/report" class="side-nav-link-ref">
                         <i class="uil uil-chart-line"></i>
                         <span>Report</span>
                     </nuxt-link>
@@ -302,7 +334,7 @@ export default {
                             <nuxt-link to="logs/users" class="side-nav-link-ref">User Logs</nuxt-link>
                         </li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
         </div>
         <!-- Sidebar -->

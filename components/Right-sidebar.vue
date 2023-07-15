@@ -128,48 +128,6 @@ export default {
         <!-- Settings -->
         <hr class="mt-0" />
         <h6 class="text-center mb-0">Choose Layouts</h6>
-        <div class="p-4">
-          <div class="mb-2">
-            <router-link
-              tag="a"
-              target="_blank"
-              to="//http://minible-h-light.nuxt-vuejs.themesbrand.com/"
-            >
-              <img
-                src="~/assets/images/layouts/layout-4.png"
-                class="img-fluid img-thumbnail"
-                alt
-              />
-            </router-link>
-          </div>
-          <div class="mb-2">
-            <router-link
-              tag="a"
-              target="_blank"
-              to="//http://minible-h-dark.nuxt-vuejs.themesbrand.com/"
-            >
-              <img
-                src="~/assets/images/layouts/layout-5.png"
-                class="img-fluid img-thumbnail"
-                alt
-              />
-            </router-link>
-          </div>
-
-          <div class="mb-2">
-            <router-link
-              tag="a"
-              target="_blank"
-              to="//http://minible-h-rtl.nuxt-vuejs.themesbrand.com/"
-            >
-              <img
-                src="~/assets/images/layouts/layout-6.png"
-                class="img-fluid img-thumbnail"
-                alt
-              />
-            </router-link>
-          </div>
-        </div>
       </div>
       <!-- end slimscroll-menu-->
     </div>

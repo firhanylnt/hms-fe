@@ -8,7 +8,7 @@ export default {
   layout: "auth",
   data() {
     return {
-      email: "admin@themesbrand.com",
+      email: "admin@ultrabit.com",
       password: "123456",
       submitted: false,
       authError: null,
@@ -45,7 +45,6 @@ export default {
         return;
       } else {
         
-        console.log(process.env.auth);
         const { email, password } = this;
           if (email && password) {
             this.$store.dispatch("authfack/login", {

@@ -5,56 +5,6 @@
 export default {
     data() {
         return {
-            users: [{
-                    profile: require("~/assets/images/users/avatar-4.jpg"),
-                    name: "Glenn Holden",
-                    location: "Nevada",
-                    status: "Cancel",
-                    price: "$250.00",
-                },
-                {
-                    profile: require("~/assets/images/users/avatar-5.jpg"),
-                    name: "Lolita Hamill",
-                    location: "Texas",
-                    status: "Success",
-                    price: "$110.00",
-                },
-                {
-                    profile: require("~/assets/images/users/avatar-6.jpg"),
-                    name: "Robert Mercer",
-                    location: "California",
-                    status: "Active",
-                    price: "$420.00",
-                },
-                {
-                    profile: require("~/assets/images/users/avatar-7.jpg"),
-                    name: "Marie Kim",
-                    location: "Montana",
-                    status: "Pending",
-                    price: "$120.00",
-                },
-                {
-                    profile: require("~/assets/images/users/avatar-8.jpg"),
-                    name: "Sonya Henshaw",
-                    location: "Colorado",
-                    status: "Active",
-                    price: "$112.00",
-                },
-                {
-                    profile: require("~/assets/images/users/avatar-2.jpg"),
-                    name: "Marie Kim",
-                    location: "Australia",
-                    status: "Success",
-                    price: "$120.00",
-                },
-                {
-                    profile: require("~/assets/images/users/avatar-1.jpg"),
-                    name: "Sonya Henshaw",
-                    location: "India",
-                    status: "Cancel",
-                    price: "$112.00",
-                },
-            ],
         };
     },
 };

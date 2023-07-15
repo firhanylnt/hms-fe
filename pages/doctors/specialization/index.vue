@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            title: "Users",
+            title: "Specialization",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -27,32 +27,12 @@ export default {
             fields: [
                 {
                     key: "id",
-                    label: "Users ID",
+                    label: "#",
                     sortable: true,
                 },
                 {
-                    key: "username",
-                    label: "Username",
-                    sortable: true,
-                },
-                {
-                    key: "email",
-                    label: "Email",
-                    sortable: true,
-                },
-                {
-                    key: "role",
-                    label: "Role",
-                    sortable: true,
-                },
-                {
-                    key: "created_at",
-                    label: "Created At",
-                    sortable: true,
-                },
-                {
-                    key: "updated_at",
-                    label: "Updated At",
+                    key: "specialization",
+                    label: "Specialization",
                     sortable: true,
                 },
                 {
@@ -76,10 +56,9 @@ export default {
     methods: {
         async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/users`
+                const url = `${process.env.apiBaseUrl}/specialization`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    console.log(res);
                     this.tableData = res
                     
                 })
@@ -96,11 +75,11 @@ export default {
         },
 
         create(){
-            this.$router.push(`/users/create`)
+            this.$router.push(`/doctors/specialization/create`)
         },
 
         move(id) {
-            this.$router.push(`/users/${id}/edit`)
+            this.$router.push(`/doctors/specialization/${id}/edit`)
         },
 
         confirm(id) {
@@ -114,10 +93,10 @@ export default {
                 confirmButtonText: "Yes, delete it!"
             }).then(async result => {
                 if (result.value) {
-                    const url = `${process.env.apiBaseUrl}/users/delete/${id}`
+                    const url = `${process.env.apiBaseUrl}/specialization/delete/${id}`
                     await this.$axios.$post(url)
                     .then(() => {
-                        Swal.fire("Deleted!", "User has been deleted.", "success");
+                        Swal.fire("Deleted!", "Specialization has been deleted.", "success");
                         this.get_data()
                     })
                 }
@@ -141,7 +120,7 @@ export default {
                             <div>
                                 <b-button variant="success" @click="create">
                                     <i class="mdi mdi-plus-thick me-2"></i>
-                                    Create User
+                                    Create Specialization
                                 </b-button>
                             </div>
                         </div>
