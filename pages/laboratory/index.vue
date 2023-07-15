@@ -30,7 +30,6 @@ export default {
             </div>
         </div>
         <h4 class="text-uppercase mt-4">Sorry, page not found</h4>
-        <p class="text-muted">It will be as simple as Occidental in fact, it will be Occidental</p>
     </div>
 </div>
 </template>
