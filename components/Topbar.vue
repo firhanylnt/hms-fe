@@ -42,6 +42,10 @@ export default {
         this.value = this.languages.find((x) => x.language === this.$i18n.locale);
         this.text = this.value.title;
         this.flag = this.value.flag;
+
+        const user = JSON.parse(localStorage.getItem('user'))
+
+        document.getElementById('span-username').innerHTML = user.username
     },
     methods: {
         /**
@@ -143,7 +147,7 @@ export default {
 
             <b-dropdown class="d-inline-block" toggle-class="header-item" right variant="white">
                 <template v-slot:button-content>
-                    <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">Administrator</span>
+                    <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15" id="span-username">Administrator</span>
                     <i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
                 </template>
 

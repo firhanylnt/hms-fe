@@ -9,7 +9,7 @@ export default {
   data() {
     return {
       email: "admin@ultrabit.com",
-      password: "123456",
+      password: "password",
       submitted: false,
       authError: null,
       tryingToLogIn: false,
@@ -36,7 +36,7 @@ export default {
   methods: {
     // Try to log the user in with the username
     // and password they provided.
-    tryToLogIn() {
+    async tryToLogIn() {
       this.submitted = true;
       // stop here if form is invalid
       this.$v.$touch();
@@ -47,10 +47,33 @@ export default {
         
         const { email, password } = this;
           if (email && password) {
-            this.$store.dispatch("authfack/login", {
-              email,
-              password
-            });
+            try {
+              const url = `${process.env.apiBaseUrl}/auth/login`;
+              const response = await this.$axios.$post(url, {
+                email: email,
+                password: password
+              });
+
+              console.log('res login', response);
+
+              if (response.success) {
+                // this.$store.dispatch("authfack/login", {
+                //   email: email,
+                //   password: password
+                // });
+
+                let user = response.data
+                user['token'] = 'fake-jwt-token'
+                localStorage.setItem('user', JSON.stringify(user));
+
+                this.$router.push({ path: "/" });
+              } else {
+                alert(response.error)
+              }
+            } catch (error) {
+              console.error('Error during login:', error);
+            }
+
           }
       }
     }

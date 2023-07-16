@@ -98,6 +98,27 @@ export default {
         this.$router.afterEach((routeTo, routeFrom) => {
             this._activateMenuDropdown();
         });
+
+        const user = JSON.parse(localStorage.getItem('user'))
+        const roles = {
+            doctor: ['menu-appointment', 'menu-patients', 'menu-medicines', 'menu-laboratory', 'menu-blood-banks', 'menu-pharmacists'],
+            receptionist: ['menu-appointment', 'menu-ipd', 'menu-doctors', 'menu-patients', 'menu-bed-management', 'menu-medicines', 'menu-laboratory', 'menu-blood-banks', 'menu-pharmacists', 'menu-nurses'],
+            patient: ['menu-appointment']
+        }
+
+        if (user.role != 'admin') {
+            const liMenus = document.getElementsByClassName('li-menus')
+            for (let i = 0; i < liMenus.length; i++) {
+                const menuItem = liMenus[i];
+                const menuId = menuItem.getAttribute('id')
+
+                console.log(menuItem, menuId)
+
+                if (!roles[user.role].includes(menuId)) {
+                    menuItem.style.display = 'none';
+                }
+            }            
+        }
     },
     methods: {
         /**
@@ -219,28 +240,28 @@ export default {
             <!-- Left Menu Start -->
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title">Menu</li>
-                <li>
+                <li class="li-menus" id="menu-dashboard">
                     <nuxt-link to="/" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-home-alt"></i>
                         <span>Dashboard</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-appointment">
                     <nuxt-link to="/appointment" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-clipboard-notes"></i>
                         <span>Appointment</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-ipd">
                     <nuxt-link to="/ipd" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-medical-drip"></i>
                         <span>IPD</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-doctors">
                     <a href="javascript:void(0);" class="is-parent has-dropdown">
                         <i class="mdi mdi-doctor"></i>
                         <span class="pt-2">Doctors</span>
@@ -254,14 +275,14 @@ export default {
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-patients">
                     <nuxt-link to="/patients" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-user-plus"></i>
                         <span>Patients</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-bed-management">
                     <a href="javascript:void(0);" class="is-parent has-dropdown">
                         <i class="uil uil-bed"></i>
                         <span class="pt-2">Bed Management</span>
@@ -275,46 +296,46 @@ export default {
                         </li>
                     </ul>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-medicines">
                     <nuxt-link to="/medicine" class="side-nav-link-ref">
                         <i class="uil uil-capsule"></i>
                         <span>Medicines</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-laboratory">
                     <nuxt-link to="/laboratory" class="side-nav-link-ref">
                         <i class="fas fa-flask"></i>
                         <span>Laboratory</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-blood-banks">
                     <nuxt-link to="/bloods" class="side-nav-link-ref">
                         <i class="mdi mdi-water"></i>
                         <span>Blood Banks</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-pharmacists">
                     <nuxt-link to="/pharmacists" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-flask"></i>
                         <span>Pharmacists</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-nurses">
                     <nuxt-link to="/nurses" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="fas fa-user-nurse"></i>
                         <span>Nurses</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-receptionists">
                     <nuxt-link to="/receptionists" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-book-reader"></i>
                         <span>Receptionists</span>
                     </nuxt-link>
                 </li>
-                <li>
+                <li class="li-menus" id="menu-users">
                     <nuxt-link to="/users" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-users-alt"></i>
