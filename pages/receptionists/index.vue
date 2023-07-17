@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            title: "receptionists",
+            title: "Receptionist",
             tableData: [],
             totalRows: 1,
             currentPage: 1,

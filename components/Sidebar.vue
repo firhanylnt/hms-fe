@@ -318,7 +318,7 @@ export default {
                     <nuxt-link to="/pharmacists" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-flask"></i>
-                        <span>Pharmacy</span>
+                        <span>Pharmacist</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-nurses">

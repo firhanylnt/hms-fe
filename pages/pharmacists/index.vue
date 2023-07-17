@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            title: "Pharmacists",
+            title: "Pharmacist",
             tableData: [],
             totalRows: 1,
             currentPage: 1,

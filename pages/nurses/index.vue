@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            title: "nurses",
+            title: "Nurse",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -136,7 +136,7 @@ export default {
                             <div>
                                 <b-button variant="success" @click="create">
                                     <i class="mdi mdi-plus-thick me-2"></i>
-                                    Create Nurses
+                                    Create Nurse
                                 </b-button>
                             </div>
                         </div>
