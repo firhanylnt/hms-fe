@@ -213,19 +213,19 @@ export default {
     <div class="navbar-brand-box">
         <nuxt-link to="/" class="logo logo-dark">
             <span class="logo-sm">
-                HMS
+                Dimedic
             </span>
             <span class="logo-lg">
-                HMS
+                Dimedic
             </span>
         </nuxt-link>
 
         <nuxt-link to="/" class="logo logo-light">
             <span class="logo-sm">
-                HMS
+                Dimedic
             </span>
             <span class="logo-lg">
-                HMS
+                Dimedic
             </span>
         </nuxt-link>
     </div>
@@ -264,14 +264,14 @@ export default {
                 <li class="li-menus" id="menu-doctors">
                     <a href="javascript:void(0);" class="is-parent has-dropdown">
                         <i class="mdi mdi-doctor"></i>
-                        <span class="pt-2">Doctors</span>
+                        <span class="pt-2">Doctor</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li>
                             <nuxt-link to="/doctors/specialization" class="side-nav-link-ref">Specialization</nuxt-link>
                         </li>
                         <li>
-                            <nuxt-link to="/doctors/list" class="side-nav-link-ref">List Doctors</nuxt-link>
+                            <nuxt-link to="/doctors/list" class="side-nav-link-ref">Doctor List</nuxt-link>
                         </li>
                     </ul>
                 </li>
@@ -279,7 +279,7 @@ export default {
                     <nuxt-link to="/patients" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-user-plus"></i>
-                        <span>Patients</span>
+                        <span>Patient</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-bed-management">
@@ -299,7 +299,7 @@ export default {
                 <li class="li-menus" id="menu-medicines">
                     <nuxt-link to="/medicine" class="side-nav-link-ref">
                         <i class="uil uil-capsule"></i>
-                        <span>Medicines</span>
+                        <span>Medicine</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-laboratory">
@@ -311,35 +311,35 @@ export default {
                 <li class="li-menus" id="menu-blood-banks">
                     <nuxt-link to="/bloods" class="side-nav-link-ref">
                         <i class="mdi mdi-water"></i>
-                        <span>Blood Banks</span>
+                        <span>Blood Bank</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-pharmacists">
                     <nuxt-link to="/pharmacists" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-flask"></i>
-                        <span>Pharmacists</span>
+                        <span>Pharmacy</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-nurses">
                     <nuxt-link to="/nurses" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="fas fa-user-nurse"></i>
-                        <span>Nurses</span>
+                        <span>Nurse</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-receptionists">
                     <nuxt-link to="/receptionists" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-book-reader"></i>
-                        <span>Receptionists</span>
+                        <span>Receptionist</span>
                     </nuxt-link>
                 </li>
                 <li class="li-menus" id="menu-users">
                     <nuxt-link to="/users" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-users-alt"></i>
-                        <span>Users</span>
+                        <span>User</span>
                     </nuxt-link>
                 </li>
                 <!-- <li>
