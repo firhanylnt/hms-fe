@@ -209,7 +209,7 @@ export default {
             </div>
             <div class="mt-5 text-center">
               <p>
-              HMS  © {{ new Date().getFullYear() }}
+              Dimedic  © {{ new Date().getFullYear() }}
               </p>
             </div>
             <!-- end row -->
