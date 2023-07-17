@@ -86,7 +86,7 @@ export default {
                                 {{data.users}}
                             </span>
                         </h4>
-                        <p class="text-muted mb-0">Users</p>
+                        <p class="text-muted mb-0">User</p>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@ export default {
                                 {{data.doctors}}
                             </span>
                         </h4>
-                        <p class="text-muted mb-0">Doctors</p>
+                        <p class="text-muted mb-0">Doctor</p>
                     </div>
                 </div>
             </div>
@@ -162,7 +162,7 @@ export default {
                                 {{data.nurses}}
                             </span>
                         </h4>
-                        <p class="text-muted mb-0">Nurses</p>
+                        <p class="text-muted mb-0">Nurse</p>
                     </div>
                 </div>
             </div>
