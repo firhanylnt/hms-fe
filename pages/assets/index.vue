@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            title: "Medicine",
+            title: "Assets",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -71,7 +71,7 @@ export default {
     methods: {
         async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/medicine`
+                const url = `${process.env.apiBaseUrl}/assets`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.tableData = res
@@ -90,11 +90,11 @@ export default {
         },
 
         create(){
-            this.$router.push(`/medicine/create`)
+            this.$router.push(`/assets/create`)
         },
 
         move(id) {
-            this.$router.push(`/medicine/${id}/edit`)
+            this.$router.push(`/assets/${id}/edit`)
         },
 
         confirm(id) {
@@ -108,10 +108,10 @@ export default {
                 confirmButtonText: "Yes, delete it!"
             }).then(async result => {
                 if (result.value) {
-                    const url = `${process.env.apiBaseUrl}/medicine/delete/${id}`
+                    const url = `${process.env.apiBaseUrl}/assets/delete/${id}`
                     await this.$axios.$post(url)
                     .then(() => {
-                        Swal.fire("Deleted!", "Medicine has been deleted.", "success");
+                        Swal.fire("Deleted!", "assets has been deleted.", "success");
                         this.get_data()
                     })
                 }
@@ -135,7 +135,7 @@ export default {
                             <div>
                                 <b-button variant="success" @click="create">
                                     <i class="mdi mdi-plus-thick me-2"></i>
-                                    Create Medicine
+                                    Create assets
                                 </b-button>
                             </div>
                         </div>

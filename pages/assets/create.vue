@@ -10,12 +10,13 @@ export default {
     },
     data() {
         return {
-            title: "Edit Medicine",
+            title: "Create Assets",
             form: {
                 name: null,
                 brand: null,
                 price: null,
                 stock: null,
+                description: null,
             },
             list: [],
             list_gender: ['Male', 'Female']
@@ -23,32 +24,13 @@ export default {
     },
     middleware: "authentication",
     created() {
-        this.get_medicine()
     },
     methods: {
-        async get_medicine(){
-            try {
-                const url = `${process.env.apiBaseUrl}/medicine/${this.$route.params.id}`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    this.form.name = res.name
-                    this.form.brand = res.brand
-                    this.form.category = res.category
-                    this.form.price = res.price
-                    this.form.stock = res.stock
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
-
         async submit() {
-            const url = `${process.env.apiBaseUrl}/medicine/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/assets`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
-                    this.$router.push(`/medicine`)
+                    this.$router.push(`/assets`)
                 })
         }
     }
@@ -100,6 +82,15 @@ export default {
                             <div class="mb-3">
                                 <label>Price</label>
                                 <input v-model="form.price" type="text" class="form-control" placeholder="Input Price"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Description</label>
+                                <textarea v-model="form.description" type="text" class="form-control" placeholder="Input Description" rows="4"></textarea>
                             </div>
                         </div>
                     </div>

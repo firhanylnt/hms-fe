@@ -342,13 +342,26 @@ export default {
                         <span>User</span>
                     </nuxt-link>
                 </li>
-                <!-- <li>
+                <li class="li-menus" id="menu-users">
+                    <nuxt-link to="/assets" class="side-nav-link-ref">
+                        <!-- <i class="fas fa-home"></i> -->
+                        <i class="uil uil-folder"></i>
+                        <span>Assets</span>
+                    </nuxt-link>
+                </li>
+                <li>
                     <nuxt-link to="/report" class="side-nav-link-ref">
                         <i class="uil uil-chart-line"></i>
                         <span>Report</span>
                     </nuxt-link>
                 </li>
                 <li>
+                    <nuxt-link to="/meals" class="side-nav-link-ref">
+                        <i class="mdi mdi-food"></i>
+                        <span>Meals Ordering System</span>
+                    </nuxt-link>
+                </li>
+                <!-- <li>
                     <a href="javascript:void(0);" class="is-parent has-dropdown">
                         <i class="uil uil-history"></i>
                         <span class="pt-2">Logs</span>

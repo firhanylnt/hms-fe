@@ -74,7 +74,7 @@ export default {
 
     <div class="row mt-2">
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -92,7 +92,7 @@ export default {
             </div>
         </div>
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -110,7 +110,7 @@ export default {
             </div>
         </div>
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -128,7 +128,7 @@ export default {
             </div>
         </div>
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -150,7 +150,7 @@ export default {
 
     <div class="row mt-2">
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -168,7 +168,7 @@ export default {
             </div>
         </div>
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -180,13 +180,13 @@ export default {
                                 {{data.bloods}}
                             </span>
                         </h4>
-                        <p class="text-muted mb-0">Bloods Stock</p>
+                        <p class="text-muted mb-0">Blood Stock</p>
                     </div>
                 </div>
             </div>
         </div>
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">
@@ -204,7 +204,7 @@ export default {
             </div>
         </div>
         <!--  -->
-        <div class="col">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <div class="float-end mt-2">

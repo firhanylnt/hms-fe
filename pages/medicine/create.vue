@@ -14,7 +14,6 @@ export default {
             form: {
                 name: null,
                 brand: null,
-                category: null,
                 price: null,
                 stock: null,
             },
@@ -74,12 +73,6 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
-                                <label>Category</label>
-                                <input v-model="form.category" type="text" class="form-control" placeholder="Input Category"/>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
                                 <label>Stock</label>
                                 <input v-model="form.stock" type="text" class="form-control" placeholder="Input Stock"/>
                             </div>
@@ -87,7 +80,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Price</label>
-                                <input v-model="form.price" type="text" class="form-control" placeholder="Input TyPricepe"/>
+                                <input v-model="form.price" type="text" class="form-control" placeholder="Input Price"/>
                             </div>
                         </div>
                     </div>
