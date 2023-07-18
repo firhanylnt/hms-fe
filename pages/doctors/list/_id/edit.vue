@@ -64,9 +64,9 @@ export default {
 
         convert_date(e) {
             const date = e === null ? new Date() : new Date(e)
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
+            const day = date.getUTCDate();
             const localDatetime =
             year +
             '-' +
