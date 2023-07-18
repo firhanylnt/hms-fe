@@ -37,6 +37,7 @@ export default {
                     this.form.category = res.category
                     this.form.price = res.price
                     this.form.stock = res.stock
+                    this.form.description = res.description
                 })
                 // Handle the JSON data
             } catch (error) {
