@@ -346,7 +346,7 @@ export default {
                     <nuxt-link to="/assets" class="side-nav-link-ref">
                         <!-- <i class="fas fa-home"></i> -->
                         <i class="uil uil-folder"></i>
-                        <span>Assets</span>
+                        <span>Asset</span>
                     </nuxt-link>
                 </li>
                 <li>

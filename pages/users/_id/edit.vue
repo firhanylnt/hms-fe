@@ -35,7 +35,6 @@ export default {
                     console.log(res);
                     this.form.username = res.username
                     this.form.email = res.email
-                    this.form.password = res.password
                     this.form.role = res.role
                     this.form.created_at = res.created_at
                 })
