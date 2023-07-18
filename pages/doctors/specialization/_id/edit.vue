@@ -12,7 +12,7 @@ export default {
         return {
             title: "Edit Specialization",
             form: {
-                specialization: null,
+                name: null,
             },
             list: [],
             list_gender: ['Male', 'Female']
@@ -29,7 +29,7 @@ export default {
                 const url = `${process.env.apiBaseUrl}/specialization/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    this.form.specialization = res.specialization
+                    this.form.name = res.name
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -86,7 +86,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Name</label>
-                                <input v-model="form.specialization" type="text" class="form-control" placeholder="Input name"/>
+                                <input v-model="form.name" type="text" class="form-control" placeholder="Input name"/>
                             </div>
                         </div>
                     </div>
