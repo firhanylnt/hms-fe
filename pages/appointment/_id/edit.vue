@@ -103,11 +103,11 @@ export default {
 
         convert_date(e) {
             const date = e === null ? new Date() : new Date(e)
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
-            const hour = date.getHours();
-            const minute = date.getMinutes();
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
+            const day = date.getUTCDate();
+            const hour = date.getUTCHours();
+            const minute = date.getUTCMinutes();
             const localDatetime =
             year +
             '-' +
