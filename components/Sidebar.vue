@@ -5,6 +5,7 @@ import CashierSidebar from "./Sidebar/CashierSidebar.vue";
 import NurseSidebar from "./Sidebar/NurseSidebar.vue";
 import ReceptionistSidebar from "./Sidebar/ReceptionistSidebar.vue";
 import DoctorSidebar from "./Sidebar/DoctorSidebar.vue";
+import SuperAdminSidebar from "./Sidebar/SuperAdminSidebar.vue";
 
 import { mapState } from "vuex";
 
@@ -25,7 +26,8 @@ export default {
     CashierSidebar,
     NurseSidebar,
     DoctorSidebar,
-    ReceptionistSidebar
+    ReceptionistSidebar,
+    SuperAdminSidebar
   },
   props: {
     type: {
@@ -279,6 +281,7 @@ export default {
         <NurseSidebar v-if="role === 'Nurse'" />
         <ReceptionistSidebar v-if="role === 'Receptionist'" />
         <DoctorSidebar v-if="role === 'Doctor'" />
+        <SuperAdminSidebar v-else />
       </div>
       <!-- Sidebar -->
     </div>
