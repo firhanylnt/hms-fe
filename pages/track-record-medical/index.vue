@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      title: "Appointment",
+      title: "Track Record Medical",
       userRole: "",
       tableData: [],
       totalRows: 1,
@@ -27,38 +27,19 @@ export default {
       sortDesc: false,
       fields: [
         {
-          key: "id",
-          label: "Appointment ID",
+          key: "date",
+          label: "Date visit",
           sortable: true
         },
         {
-          key: "patient",
-          label: "Patient",
+          key: "diagonis",
+          label: "Diagonis",
           sortable: true
         },
         {
           key: "doctor",
           label: "Doctor",
           sortable: true
-        },
-        {
-          key: "specialization",
-          label: "Specialization",
-          sortable: true
-        },
-        {
-          key: "date",
-          label: "Date",
-          sortable: true
-        },
-        {
-          key: "payment",
-          label: "Payment Method",
-          sortable: true
-        },
-        {
-          label: "Action",
-          key: "action"
         }
       ]
     };
@@ -140,14 +121,10 @@ export default {
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12 col-md-12">
-                <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
+                <div v-if="role === 'Cashier'">
+                  <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
+                    Create Invoices
                   </b-button>
                 </div>
               </div>

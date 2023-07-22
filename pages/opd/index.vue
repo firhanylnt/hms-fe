@@ -11,8 +11,7 @@ export default {
   },
   data() {
     return {
-      title: "Appointment",
-      userRole: "",
+      title: "OPD Patient",
       tableData: [],
       totalRows: 1,
       currentPage: 1,
@@ -28,7 +27,7 @@ export default {
       fields: [
         {
           key: "id",
-          label: "Appointment ID",
+          label: "OPD ID",
           sortable: true
         },
         {
@@ -37,23 +36,18 @@ export default {
           sortable: true
         },
         {
-          key: "doctor",
-          label: "Doctor",
-          sortable: true
-        },
-        {
-          key: "specialization",
-          label: "Specialization",
+          key: "room",
+          label: "Room Number",
           sortable: true
         },
         {
           key: "date",
-          label: "Date",
+          label: "Admission Date",
           sortable: true
         },
         {
-          key: "payment",
-          label: "Payment Method",
+          key: "status",
+          label: "Status",
           sortable: true
         },
         {
@@ -62,10 +56,6 @@ export default {
         }
       ]
     };
-  },
-  mounted: function() {
-    const userRoles = JSON.parse(localStorage.getItem("user"));
-    this.userRole = userRoles.role;
   },
   computed: {
     /**
@@ -81,7 +71,7 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/appointment`;
+        const url = `${process.env.apiBaseUrl}/ipd`;
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;
@@ -99,11 +89,11 @@ export default {
     },
 
     create() {
-      this.$router.push(`/appointment/create`);
+      this.$router.push(`/opd/create`);
     },
 
     move(id) {
-      this.$router.push(`/appointment/${id}/edit`);
+      this.$router.push(`/opd/${id}/edit`);
     },
 
     confirm(id) {
@@ -117,9 +107,9 @@ export default {
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          const url = `${process.env.apiBaseUrl}/appointment/delete/${id}`;
+          const url = `${process.env.apiBaseUrl}/opd/delete/${id}`;
           await this.$axios.$post(url).then(() => {
-            Swal.fire("Deleted!", "Appointment has been deleted.", "success");
+            Swal.fire("Deleted!", "OPD has been deleted.", "success");
             this.get_data();
           });
         }
@@ -141,13 +131,9 @@ export default {
             <div class="row">
               <div class="col-sm-12 col-md-12">
                 <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
+                  <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
+                    Create OPD Patient
                   </b-button>
                 </div>
               </div>

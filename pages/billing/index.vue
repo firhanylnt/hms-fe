@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      title: "Appointment",
+      title: "Billing",
       userRole: "",
       tableData: [],
       totalRows: 1,
@@ -27,38 +27,34 @@ export default {
       sortDesc: false,
       fields: [
         {
-          key: "id",
-          label: "Appointment ID",
-          sortable: true
-        },
-        {
           key: "patient",
           label: "Patient",
           sortable: true
         },
         {
-          key: "doctor",
-          label: "Doctor",
+          key: "ipd",
+          label: "IPD",
           sortable: true
         },
         {
-          key: "specialization",
-          label: "Specialization",
+          key: "item",
+          label: "Item",
           sortable: true
         },
         {
-          key: "date",
-          label: "Date",
+          key: "subtotal",
+          label: "Subtotal",
           sortable: true
         },
         {
-          key: "payment",
-          label: "Payment Method",
+          key: "tax",
+          label: "Tax",
           sortable: true
         },
         {
-          label: "Action",
-          key: "action"
+          key: "total",
+          label: "Total",
+          sortable: true
         }
       ]
     };
@@ -140,14 +136,10 @@ export default {
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12 col-md-12">
-                <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
+                <div v-if="userRole === 'Cashier'">
+                  <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
+                    Create Billing
                   </b-button>
                 </div>
               </div>

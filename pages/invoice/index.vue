@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      title: "Appointment",
+      title: "Invoices",
       userRole: "",
       tableData: [],
       totalRows: 1,
@@ -28,37 +28,28 @@ export default {
       fields: [
         {
           key: "id",
-          label: "Appointment ID",
+          label: "Invoices ID",
           sortable: true
         },
         {
-          key: "patient",
-          label: "Patient",
+          key: "code",
+          label: "Code",
           sortable: true
         },
         {
-          key: "doctor",
-          label: "Doctor",
+          key: "amount",
+          label: "Amount",
           sortable: true
         },
         {
-          key: "specialization",
-          label: "Specialization",
+          key: "status",
+          label: "Status",
           sortable: true
         },
         {
-          key: "date",
-          label: "Date",
+          key: "created_at",
+          label: "Created At",
           sortable: true
-        },
-        {
-          key: "payment",
-          label: "Payment Method",
-          sortable: true
-        },
-        {
-          label: "Action",
-          key: "action"
         }
       ]
     };
@@ -140,14 +131,10 @@ export default {
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12 col-md-12">
-                <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
+                <div v-if="userRole === 'Cashier'">
+                  <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
+                    Create Invoices
                   </b-button>
                 </div>
               </div>
