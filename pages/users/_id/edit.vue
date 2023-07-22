@@ -19,7 +19,7 @@ export default {
                 created_at: null,
                 updated_at: null,
             },
-            list_role: ['Super Admin', 'Admin', 'Receptionists']
+            list_role: ['Super Admin', 'Admin', 'Receptionists', 'Nurses', 'Doctors', 'Cashier', 'Patient']
         };
     },
     middleware: "authentication",
