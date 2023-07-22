@@ -12,7 +12,7 @@ export default {
         return {
             title: "Edit Doctor",
             form: {
-                specialization: null,
+                specialization_id: null,
                 name: null,
                 gender: null,
                 phone: null,
@@ -34,7 +34,7 @@ export default {
                 const url = `${process.env.apiBaseUrl}/doctors/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    this.form.specialization = res.specialization
+                    this.form.specialization_id = res.specialization
                     this.form.dob = this.convert_date(res.dob)
                     this.form.name = res.name
                     this.form.phone = res.phone
@@ -64,9 +64,9 @@ export default {
 
         convert_date(e) {
             const date = e === null ? new Date() : new Date(e)
-            const year = date.getFullYear();
-            const month = date.getMonth() + 1;
-            const day = date.getDate();
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
+            const day = date.getUTCDate();
             const localDatetime =
             year +
             '-' +
@@ -77,6 +77,8 @@ export default {
         },
 
         async submit() {
+            this.form.specialization_id = this.form.specialization_id.id
+
             const url = `${process.env.apiBaseUrl}/doctors/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
@@ -139,10 +141,10 @@ export default {
                             <div class="mb-3">
                                 <label>Specialization</label>
                                 <v-select
-                                    v-model="form.specialization" 
+                                    v-model="form.specialization_id" 
                                     :options="list" 
-                                    label="specialization"
-                                    :reduce="list => list.specialization"
+                                    :label="'specialization'"
+                                    :value="'id'"
                                     class="style-chooser"
                                     placeholder="Select Specialization"
                                 >

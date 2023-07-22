@@ -12,11 +12,10 @@ export default {
         return {
             title: "Create Appointment",
             form: {
-                patient: null,
-                specialization: null,
-                date: null,
-                doctor: null,
-                payment: null,
+                patient_id: null,
+                doctor_id: null,
+                appointment_date: null,
+                payment_method: null,
             },
             list: [],
             list_gender: ['Male', 'Female'],
@@ -42,6 +41,7 @@ export default {
                         const arr = {
                             name: v.first_name +' '+ v.last_name,
                             dob: v.dob,
+                            id: v.id,
                         }
                         this.list_patient.push(arr)
                     })
@@ -70,7 +70,7 @@ export default {
         
         async get_list_doctor(){
             try {
-                const url = `${process.env.apiBaseUrl}/doctors/specialization/${this.form.specialization}`
+                const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.list_doctor = res
@@ -83,6 +83,9 @@ export default {
         },
 
         async submit() {
+            this.form.patient_id = this.form.patient_id.id
+            this.form.doctor_id = this.form.doctor_id.id
+
             const url = `${process.env.apiBaseUrl}/appointment`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
@@ -117,10 +120,10 @@ export default {
                             <div class="mb-3">
                                 <label>Patient</label>
                                 <v-select
-                                    v-model="form.patient" 
+                                    v-model="form.patient_id" 
                                     :options="list_patient"
-                                    label="name" 
-                                    :reduce="list_patient => list_patient.name" 
+                                    :label="'name'" 
+                                    :value="'id'" 
                                     class="style-chooser"
                                     placeholder="Select patient"
                                 >
@@ -153,10 +156,10 @@ export default {
                             <div class="mb-3">
                                 <label>Doctor</label>
                                 <v-select
-                                    v-model="form.doctor" 
+                                    v-model="form.doctor_id" 
                                     :options="list_doctor"
-                                    label="name"
-                                    :reduce="list_doctor => list_doctor.name"  
+                                    :label="'name'" 
+                                    :value="'id'" 
                                     class="style-chooser"
                                     placeholder="Select Docter"
                                 >
@@ -166,7 +169,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Date</label>
-                                <input v-model="form.date" type="datetime-local" class="form-control" placeholder="Appointment Date"/>
+                                <input v-model="form.appointment_date" type="datetime-local" class="form-control" placeholder="Appointment Date"/>
                                 <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                             </div>
                         </div>
@@ -177,7 +180,7 @@ export default {
                             <div class="mb-3">
                                 <label>Payment Methods</label>
                                 <v-select
-                                    v-model="form.payment" 
+                                    v-model="form.payment_method" 
                                     :options="list_payment"
                                     class="style-chooser"
                                     placeholder="Select Payment Method"

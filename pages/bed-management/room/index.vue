@@ -66,7 +66,7 @@ export default {
     methods: {
         async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedroom`
+                const url = `${process.env.apiBaseUrl}/rooms`
                 await this.$axios.$get(url)
                 .then((res) => {
                     console.log(res);
@@ -104,7 +104,7 @@ export default {
                 confirmButtonText: "Yes, delete it!"
             }).then(async result => {
                 if (result.value) {
-                    const url = `${process.env.apiBaseUrl}/bedroom/delete/${id}`
+                    const url = `${process.env.apiBaseUrl}/rooms/delete/${id}`
                     await this.$axios.$post(url)
                     .then(() => {
                         Swal.fire("Deleted!", "Bedroom has been deleted.", "success");

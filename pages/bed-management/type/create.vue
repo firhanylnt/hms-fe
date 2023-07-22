@@ -12,7 +12,7 @@ export default {
         return {
             title: "Create Bed Type",
             form: {
-                type: null,
+                room_type: null,
             },
             list: [],
             list_gender: ['Male', 'Female']
@@ -25,7 +25,7 @@ export default {
     methods: {
         async get_list(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedtype`
+                const url = `${process.env.apiBaseUrl}/room-types`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.list = res
@@ -38,7 +38,7 @@ export default {
         },
 
         async submit() {
-            const url = `${process.env.apiBaseUrl}/bedtype`
+            const url = `${process.env.apiBaseUrl}/room-types`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
                     this.$router.push(`/bed-management/type`)
@@ -71,7 +71,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Type</label>
-                                <input v-model="form.type" type="text" class="form-control" placeholder="Input Type"/>
+                                <input v-model="form.room_type" type="text" class="form-control" placeholder="Input Type"/>
                             </div>
                         </div>
                     </div>

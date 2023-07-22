@@ -12,7 +12,7 @@ export default {
         return {
             title: "Edit bed type",
             form: {
-                type: null,
+                room_type: null,
             },
         };
     },
@@ -23,10 +23,10 @@ export default {
     methods: {
         async get_bedtype(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedtype/${this.$route.params.id}`
+                const url = `${process.env.apiBaseUrl}/room-types/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    this.form.type = res.type
+                    this.form.room_type = res.room_type
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -36,7 +36,7 @@ export default {
         },
 
         async submit() {
-            const url = `${process.env.apiBaseUrl}/bedtype/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/room-types/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
                     this.$router.push(`/bed-management/type`)
@@ -68,7 +68,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Type</label>
-                                <input v-model="form.type" type="text" class="form-control" placeholder="Input Type"/>
+                                <input v-model="form.room_type" type="text" class="form-control" placeholder="Input Type"/>
                             </div>
                         </div>
                     </div>

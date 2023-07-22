@@ -29,7 +29,7 @@ export default {
     },
     methods: {
         async get_users(){
-            const arr = ['users','doctors','patients','appointment','nurses','bloods','bedroom','ipd']
+            const arr = ['users','doctors','patients','appointment','nurses','bloods','rooms','ipd']
 
             arr.map(async (name) => {
                 const url = `${process.env.apiBaseUrl}/${name}`
@@ -53,7 +53,7 @@ export default {
                     if(name === 'bloods'){
                         this.data.bloods = res.length
                     }
-                    if(name === 'bedroom'){
+                    if(name === 'rooms'){
                         this.data.rooms = res.length
                     }
                     if(name === 'ipd'){

@@ -56,7 +56,7 @@ export default {
     methods: {
         async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedtype`
+                const url = `${process.env.apiBaseUrl}/room-types`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.tableData = res
@@ -93,7 +93,7 @@ export default {
                 confirmButtonText: "Yes, delete it!"
             }).then(async result => {
                 if (result.value) {
-                    const url = `${process.env.apiBaseUrl}/bedtype/delete/${id}`
+                    const url = `${process.env.apiBaseUrl}/room-types/delete/${id}`
                     await this.$axios.$post(url)
                     .then(() => {
                         Swal.fire("Deleted!", "Bed Type has been deleted.", "success");

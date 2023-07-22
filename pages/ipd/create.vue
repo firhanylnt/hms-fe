@@ -12,17 +12,16 @@ export default {
         return {
             title: "Create IPD Patient",
             form: {
-                patient: null,
-                type: null,
-                date: null,
-                room: null,
-                payment: null,
-                symptoms: null,
-                notes: null,
+                patient_id: null,
+                room_id: null,
+                blood_pressure: null,
                 height: null,
                 weight: null,
-                pressure: null,
-                status: null,
+                admission_date: null,
+                payment_method: null,
+                symptoms: null,
+                notes: null,
+                is_active: null,
             },
             list: [],
             list_gender: ['Male', 'Female'],
@@ -48,6 +47,7 @@ export default {
                         const arr = {
                             name: v.first_name +' '+ v.last_name,
                             dob: v.dob,
+                            id: v.id
                         }
                         this.list_patient.push(arr)
                     })
@@ -62,7 +62,7 @@ export default {
 
         async get_room_type(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedtype`
+                const url = `${process.env.apiBaseUrl}/room-types`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.room_type = res
@@ -76,7 +76,7 @@ export default {
 
         async get_list_room(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedroom/type/${this.form.type}`
+                const url = `${process.env.apiBaseUrl}/rooms?roomType=${this.form.type}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.list_room = res
@@ -89,6 +89,10 @@ export default {
         },
 
         async submit() {
+            this.form.patient_id = this.form.patient_id.id
+            this.form.room_id = this.form.room_id.id
+            this.form.is_active = this.form.is_active == '1' ? true : false
+
             const url = `${process.env.apiBaseUrl}/ipd`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
@@ -122,10 +126,10 @@ export default {
                             <div class="mb-3">
                                 <label>Patient</label>
                                 <v-select
-                                    v-model="form.patient" 
+                                    v-model="form.patient_id" 
                                     :options="list_patient"
-                                    label="name" 
-                                    :reduce="list_patient => list_patient.name" 
+                                    :label="'name'" 
+                                    :value="'id'" 
                                     class="style-chooser"
                                     placeholder="Select patient"
                                 >
@@ -138,7 +142,7 @@ export default {
                         </div>
                         <div class="col">
                             <div class="mb-3">
-                                <label>type</label>
+                                <label>Room Type</label>
                                 <v-select
                                     v-model="form.type" 
                                     :options="room_type"
@@ -156,10 +160,10 @@ export default {
                             <div class="mb-3">
                                 <label>Room</label>
                                 <v-select
-                                    v-model="form.room" 
+                                    v-model="form.room_id" 
                                     :options="list_room"
-                                    label="number"
-                                    :reduce="list_room => list_room.number"  
+                                    :label="'number'"
+                                    :value="'id'"
                                     class="style-chooser"
                                     placeholder="Select Room"
                                 >
@@ -172,7 +176,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Blood Pressure</label>
-                                <input v-model="form.pressure" type="text" class="form-control" placeholder="Blood Pressure"/>
+                                <input v-model="form.blood_pressure" type="text" class="form-control" placeholder="Blood Pressure"/>
                             </div>
                         </div>
                         <div class="col">
@@ -193,7 +197,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Admission Date</label>
-                                <input v-model="form.date" type="datetime-local" class="form-control" placeholder="ipd Date"/>
+                                <input v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="ipd Date"/>
                                 <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                             </div>
                         </div>
@@ -201,7 +205,7 @@ export default {
                             <div class="mb-3">
                                 <label>Payment Methods</label>
                                 <v-select
-                                    v-model="form.payment" 
+                                    v-model="form.payment_method" 
                                     :options="list_payment"
                                     class="style-chooser"
                                     placeholder="Select Payment Method"
@@ -229,11 +233,11 @@ export default {
                         <label>Status</label>
                         <div class="col-md-12">
                             <b-form-checkbox
-                            v-model="form.status"
+                            v-model="form.is_active"
                             class="mb-3"
                             plain
-                            value="active"
-                            unchecked-value="inactive"
+                            value="1"
+                            unchecked-value="0"
                             >Active</b-form-checkbox>
                         </div>
                     </div>

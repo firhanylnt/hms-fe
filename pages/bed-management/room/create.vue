@@ -12,8 +12,8 @@ export default {
         return {
             title: "Create Bedroom",
             form: {
-                type: null,
-                number: null,
+                room_type_id: null,
+                room_number: null,
                 slot: null,
             },
             list: [],
@@ -27,7 +27,7 @@ export default {
     methods: {
         async get_list(){
             try {
-                const url = `${process.env.apiBaseUrl}/bedtype`
+                const url = `${process.env.apiBaseUrl}/room-types`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.list = res
@@ -40,7 +40,9 @@ export default {
         },
 
         async submit() {
-            const url = `${process.env.apiBaseUrl}/bedroom`
+            this.form.room_type_id = this.form.room_type_id.id
+
+            const url = `${process.env.apiBaseUrl}/rooms`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
                     this.$router.push(`/bed-management/room`)
@@ -73,7 +75,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Room Number</label>
-                                <input v-model="form.number" type="text" class="form-control" placeholder="Input Room Number"/>
+                                <input v-model="form.room_number" type="text" class="form-control" placeholder="Input Room Number"/>
                             </div>
                         </div>
                         <div class="col">
@@ -90,10 +92,10 @@ export default {
                             <div class="mb-3">
                                 <label>Type</label>
                                 <v-select
-                                    v-model="form.type" 
+                                    v-model="form.room_type_id" 
                                     :options="list" 
-                                    label="type"
-                                    :reduce="list => list.type"
+                                    :value="'id'"
+                                    :label="'type'"
                                     class="style-chooser"
                                     placeholder="Select Type"
                                 >
