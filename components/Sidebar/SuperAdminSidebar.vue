@@ -14,16 +14,6 @@ export default {
       menuItems: menuItems
     };
   },
-  props: {
-    type: {
-      type: String,
-      required: true
-    },
-    width: {
-      type: String,
-      required: true
-    }
-  },
   computed: mapState(["layout"]),
   watch: {
     type: {
@@ -122,7 +112,20 @@ export default {
         "menu-pharmacists",
         "menu-nurses"
       ],
-      patient: ["menu-appointment"]
+      patient: ["menu-appointment"],
+      "Super Admin": [
+        "menu-dashboard",
+        "menu-appointment",
+        "menu-ipd",
+        "menu-doctors",
+        "menu-patients",
+        "menu-bed-management",
+        "menu-medicines",
+        "menu-laboratory",
+        "menu-blood-banks",
+        "menu-pharmacists",
+        "menu-nurses"
+      ]
     };
 
     if (user.role != "admin") {
@@ -252,21 +255,21 @@ export default {
     <li class="li-menus" id="menu-opd">
       <nuxt-link to="/opd" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
-        <i class="uil uil-medical-drip"></i>
+        <i class="uil uil-file-medical-alt"></i>
         <span>OPD</span>
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-billing">
       <nuxt-link to="/billing" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
-        <i class="uil uil-clipboard-notes"></i>
+        <i class="uil uil-bill"></i>
         <span>Billing</span>
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-invoices">
       <nuxt-link to="/invoice" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
-        <i class="uil uil-medical-drip"></i>
+        <i class="uil uil-invoice"></i>
         <span>Invoices</span>
       </nuxt-link>
     </li>
