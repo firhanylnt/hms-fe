@@ -81,6 +81,10 @@ export default {
           sortable: true,
           thStyle: "min-width: 200px"
         },
+        {
+          label: "Action",
+          key: "action"
+        }
       ]
     };
   },
@@ -88,15 +92,6 @@ export default {
     const userRoles = JSON.parse(localStorage.getItem("user"));
     this.userRole = userRoles.role;
     this.user = userRoles
-
-    if (this.userRole == 'Super Admin' || this.userRole == 'Receptionist' || this.userRole == 'Doctor') {
-      this.fields.push(
-        {
-          label: "Action",
-          key: "action",
-          thStyle: "min-width: 150px"
-        })
-    }
   },
   computed: {
     /**
@@ -113,12 +108,9 @@ export default {
     async get_data() {
       try {
         let user = JSON.parse(localStorage.getItem("user"));
-        let url = `${process.env.apiBaseUrl}/appointments?`;
+        let url = `${process.env.apiBaseUrl}/appointments`;
         if (user.role != 'Super Admin' && user.role != 'Receptionist') {
-          url += `user_id=${user.id}&`;
-        }
-        if (user.role == 'Patient') {
-          url += `email=${user.email}`
+          url += `?user_id=${user.id}`;
         }
         await this.$axios.$get(url).then(res => {
           console.log(res);
@@ -176,20 +168,6 @@ export default {
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="row">
-              <div class="col-sm-12 col-md-12">
-                <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
-                    <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
-                  </b-button>
-                </div>
-              </div>
-            </div>
             <div class="row mt-4">
               <div class="col-sm-12 col-md-4">
                 <div>
@@ -230,24 +208,6 @@ export default {
                   </span>
                 </template>
 
-                <template #cell(action)="row">
-                  <b-button
-                    variant="warning"
-                    size="sm"
-                    @click="move(row.item.id)"
-                    class="mr-2"
-                  >
-                    Edit
-                  </b-button>
-                  <b-button
-                    variant="danger"
-                    size="sm"
-                    @click="confirm(row.item.id)"
-                    class="mr-2"
-                  >
-                    Delete
-                  </b-button>
-                </template>
               </b-table>
             </div>
             <div class="row">
