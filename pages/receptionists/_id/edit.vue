@@ -12,14 +12,15 @@ export default {
         return {
             title: "Edit receptionist",
             form: {
+                user_id: null,
                 first_name: null,
                 last_name: null,
                 gender: null,
                 phone: null,
-                email: null,
                 dob: null,
                 address: null,
             },
+            users: [],
             list: [],
             list_gender: ['Male', 'Female']
         };
@@ -27,18 +28,31 @@ export default {
     middleware: "authentication",
     created() {
         this.get_receptionist()
+        this.get_users()
     },
     methods: {
+        async get_users(){
+            try {
+                const url = `${process.env.apiBaseUrl}/users?role=Receptionist`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.users = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
         async get_receptionist(){
             try {
                 const url = `${process.env.apiBaseUrl}/receptionists/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    console.log(res);
+                    this.form.user_id = { id: res.user_id, email: res.user };
                     this.form.first_name = res.first_name
                     this.form.last_name = res.last_name
                     this.form.dob = this.convert_date(res.dob)
-                    this.form.email = res.email
                     this.form.phone = res.phone
                     this.form.gender = res.gender
                     this.form.address = res.address
@@ -65,6 +79,7 @@ export default {
         },
 
         async submit() {
+            this.form.user_id = this.form.user_id.id
             const url = `${process.env.apiBaseUrl}/receptionists/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
@@ -93,6 +108,22 @@ export default {
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>User</label>
+                                <v-select
+                                    v-model="form.user_id" 
+                                    :options="users" 
+                                    :label="'email'"
+                                    :value="'id'"
+                                    class="style-chooser"
+                                    placeholder="Select User"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col">
@@ -131,12 +162,6 @@ export default {
                     </div>
 
                     <div class="row">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input v-model="form.email" type="text" class="form-control" placeholder="Input email"/>
-                            </div>
-                        </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label>Phone</label>
