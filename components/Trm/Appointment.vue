@@ -83,8 +83,7 @@ export default {
         },
         {
           label: "Action",
-          key: "action",
-          thStyle: "min-width: 150px"
+          key: "action"
         }
       ]
     };
@@ -169,20 +168,6 @@ export default {
       <div class="col-12">
         <div class="card">
           <div class="card-body">
-            <div class="row">
-              <div class="col-sm-12 col-md-12">
-                <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
-                    <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
-                  </b-button>
-                </div>
-              </div>
-            </div>
             <div class="row mt-4">
               <div class="col-sm-12 col-md-4">
                 <div>
@@ -223,24 +208,6 @@ export default {
                   </span>
                 </template>
 
-                <template #cell(action)="row">
-                  <b-button
-                    variant="warning"
-                    size="sm"
-                    @click="move(row.item.id)"
-                    class="mr-2"
-                  >
-                    Edit
-                  </b-button>
-                  <b-button
-                    variant="danger"
-                    size="sm"
-                    @click="confirm(row.item.id)"
-                    class="mr-2"
-                  >
-                    Delete
-                  </b-button>
-                </template>
               </b-table>
             </div>
             <div class="row">

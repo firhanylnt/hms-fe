@@ -128,7 +128,8 @@ export default {
         "menu-nurses",
         "menu-billing",
         "menu-invoices",
-        "menu-users"
+        "menu-users",
+        "menu-track-record",
       ]
     };
 
@@ -274,7 +275,7 @@ export default {
       <nuxt-link to="/invoice" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-invoice"></i>
-        <span>Invoices</span>
+        <span>Invoice</span>
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-doctors">
@@ -385,19 +386,12 @@ export default {
         <span>Meals Ordering System</span>
       </nuxt-link>
     </li>
-    <!-- <li>
-            <a href="javascript:void(0);" class="is-parent has-dropdown">
-                <i class="uil uil-history"></i>
-                <span class="pt-2">Logs</span>
-            </a>
-            <ul class="sub-menu" aria-expanded="false">
-                <li>
-                    <nuxt-link to="logs/doctors" class="side-nav-link-ref">Doctor Logs</nuxt-link>
-                </li>
-                <li>
-                    <nuxt-link to="logs/users" class="side-nav-link-ref">User Logs</nuxt-link>
-                </li>
-            </ul>
-        </li> -->
+    <li class="li-menus" id="menu-track-record">
+      <nuxt-link to="/track-record-medical" class="side-nav-link-ref">
+        <!-- <i class="fas fa-home"></i> -->
+        <i class="uil uil-medical-drip"></i>
+        <span>Track Record Medical</span>
+      </nuxt-link>
+    </li>
   </ul>
 </template>
