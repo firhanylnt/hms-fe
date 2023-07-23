@@ -12,13 +12,14 @@ export default {
         return {
             title: "Edit Doctor",
             form: {
+                user_id: null,
                 specialization_id: null,
                 name: null,
                 gender: null,
                 phone: null,
-                email: null,
                 dob: null,
             },
+            users: [],
             list: [],
             list_gender: ['Male', 'Female']
         };
@@ -27,18 +28,34 @@ export default {
     created() {
         this.get_list()
         this.get_doctors()
+        this.get_users()
     },
     methods: {
+        async get_users(){
+            try {
+                const url = `${process.env.apiBaseUrl}/users?role=Doctor`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.users = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+
         async get_doctors(){
             try {
                 const url = `${process.env.apiBaseUrl}/doctors/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    this.form.specialization_id = res.specialization
+                    this.form.user_id = { id: res.user_id, email: res.user };
+                    this.form.specialization_id = { id: res.specialization_id, specialization: res.specialization };
                     this.form.dob = this.convert_date(res.dob)
                     this.form.name = res.name
                     this.form.phone = res.phone
-                    this.form.email = res.email
                     this.form.gender = res.gender
                 })
                 // Handle the JSON data
@@ -77,6 +94,7 @@ export default {
         },
 
         async submit() {
+            this.form.user_id = this.form.user_id.id
             this.form.specialization_id = this.form.specialization_id.id
 
             const url = `${process.env.apiBaseUrl}/doctors/${this.$route.params.id}`
@@ -107,6 +125,22 @@ export default {
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>User</label>
+                                <v-select
+                                    v-model="form.user_id" 
+                                    :options="users" 
+                                    :label="'email'"
+                                    :value="'id'"
+                                    class="style-chooser"
+                                    placeholder="Select User"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col">
@@ -154,12 +188,6 @@ export default {
                     </div>
 
                     <div class="row">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input v-model="form.email" type="text" class="form-control" placeholder="Input email"/>
-                            </div>
-                        </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label>Phone</label>
