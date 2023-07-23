@@ -8,13 +8,12 @@
         <span>Dashboard</span>
       </nuxt-link>
     </li>
-    <li class="li-menus" id="menu-billing">
+    <!-- <li class="li-menus" id="menu-billing">
       <nuxt-link to="/billing" class="side-nav-link-ref">
-        <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-bill"></i>
         <span>Billing</span>
       </nuxt-link>
-    </li>
+    </li> -->
     <li class="li-menus" id="menu-invoices">
       <nuxt-link to="/invoice" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->

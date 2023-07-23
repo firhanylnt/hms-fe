@@ -11,6 +11,8 @@ export default {
     data() {
         return {
             title: "View Invoice",
+            userRole: "",
+            disabled: null,
             form: {
                 patient_id: null,
                 type: null,
@@ -24,6 +26,10 @@ export default {
             list_status: ['Pending','Paid'],
             list_patient: [],
         };
+    },
+    mounted: function() {
+        const userRoles = JSON.parse(localStorage.getItem("user"));
+        this.userRole = userRoles.role;
     },
     middleware: "authentication",
     created() {
@@ -44,6 +50,8 @@ export default {
                     this.form.details = res.details
                     
                 })
+
+                this.disabled = this.userRole === 'Patient' ? 'disabled' : '';
                 // Handle the JSON data
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -171,6 +179,7 @@ export default {
                             <div class="mb-3">
                                 <label>Payment Method</label>
                                 <v-select
+                                    :disabled="disabled"
                                     v-model="form.payment_method" 
                                     :options="list_payment"
                                     class="style-chooser"
@@ -183,6 +192,7 @@ export default {
                             <div class="mb-3">
                                 <label>Status</label>
                                 <v-select
+                                    :disabled="disabled"
                                     v-model="form.status" 
                                     :options="list_status"
                                     class="style-chooser"
@@ -231,7 +241,7 @@ export default {
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" v-if="userRole === 'Cashier' || userRole === 'Super Admin'">
                         <div class="col-md-12 mt-4">
                             <div>
                                 <b-button variant="light" @click="$router.back()">
