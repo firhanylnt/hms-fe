@@ -219,7 +219,7 @@ export default {
                   <span>{{ data.value === null || data.value === '' ? '-' : data.value }}</span>
                 </template>
                 <template v-slot:cell(appointment_date)="data">
-                  <span>{{ new Date(data.value) }}</span>
+                  <span>{{ new Date(data.value).toISOString() }}</span>
                 </template>
                 <template v-slot:cell(is_approved)="data">
                   <span>{{ data.value ? 'Approved' : 'Not Approved Yet' }}</span>
