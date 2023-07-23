@@ -67,7 +67,7 @@ export default {
           text:
             this.form.doctor_id.name +
             " will handle Appointment by " +
-            this.form.patien_name +
+            this.form.patient_name +
             " at " +
             this.form.appointment_date,
           icon: "warning",
@@ -85,7 +85,7 @@ export default {
             doctor_id: this.form.doctor_id.id,
             email: this.form.email,
             phone_number: this.form.phone_number,
-            patient_name: this.form.patien_name,
+            patient_name: this.form.patient_name,
             patient_gender: this.form.patient_gender,
             appointment_date: this.form.appointment_date,
             description: this.form.description,
@@ -245,7 +245,7 @@ export default {
               </div>
               <div class="col">
                 <div class="mb-3">
-                  <label>Status</label>
+                  <label>Approval Status</label>
                   <v-select
                     v-model="form.is_approved"
                     :options="list_status"
