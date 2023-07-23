@@ -4,6 +4,10 @@ export default {
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
    */
+  server: {
+    port: 3000, // <--- Change this value to your desired port
+    host: '0.0.0.0', // This allows access from any host
+  },
   ssr: false,
   /*
    ** Nuxt target
@@ -82,7 +86,7 @@ export default {
    */
   build: {},
   env: {
-    apiBaseUrl: 'http://localhost:3001',
+    apiBaseUrl: 'https://be-dimedic.dividefense.com',
     auth: process.env.VUE_APP_DEFAULT_AUTH,
     apikey: process.env.VUE_APP_APIKEY,
     authdomain: process.env.VUE_APP_AUTHDOMAIN,
