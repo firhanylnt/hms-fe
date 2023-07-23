@@ -13,7 +13,6 @@ export default {
       title: "Create OPD Patient",
       form: {
         patient_id: null,
-        room_id: null,
         blood_pressure: null,
         height: null,
         weight: null,
@@ -28,13 +27,12 @@ export default {
       list_patient: [],
       room_type: [],
       list_room: [],
-      list_payment: ["Pribadi", "BPJS", "Asuransi"]
+      list_payment: ['Individual', 'Insurance']
     };
   },
   middleware: "authentication",
   created() {
     this.get_list_patient();
-    this.get_room_type();
   },
   methods: {
     async get_list_patient() {
@@ -58,36 +56,11 @@ export default {
       }
     },
 
-    async get_room_type() {
-      try {
-        const url = `${process.env.apiBaseUrl}/room-types`;
-        await this.$axios.$get(url).then(res => {
-          this.room_type = res;
-        });
-        // Handle the JSON data
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    },
-
-    async get_list_room() {
-      try {
-        const url = `${process.env.apiBaseUrl}/rooms?roomType=${this.form.type}`;
-        await this.$axios.$get(url).then(res => {
-          this.list_room = res;
-        });
-        // Handle the JSON data
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    },
-
     async submit() {
       this.form.patient_id = this.form.patient_id.id;
-      this.form.room_id = this.form.room_id.id;
       this.form.is_active = this.form.is_active == "1" ? true : false;
 
-      const url = `${process.env.apiBaseUrl}/ipd`;
+      const url = `${process.env.apiBaseUrl}/opd`;
       await this.$axios.$post(url, this.form).then(res => {
         this.$router.push(`/opd`);
       });
@@ -129,36 +102,6 @@ export default {
                     <template #option="{ name, dob }">
                       {{ name }} | {{ dob }}
                     </template>
-                  </v-select>
-                </div>
-              </div>
-              <div class="col">
-                <div class="mb-3">
-                  <label>Room Type</label>
-                  <v-select
-                    v-model="form.type"
-                    :options="room_type"
-                    label="type"
-                    :reduce="room_type => room_type.type"
-                    class="style-chooser"
-                    @input="get_list_room"
-                    placeholder="Select type"
-                  >
-                  </v-select>
-                </div>
-              </div>
-
-              <div class="col">
-                <div class="mb-3">
-                  <label>Room</label>
-                  <v-select
-                    v-model="form.room_id"
-                    :options="list_room"
-                    :label="'number'"
-                    :value="'id'"
-                    class="style-chooser"
-                    placeholder="Select Room"
-                  >
                   </v-select>
                 </div>
               </div>

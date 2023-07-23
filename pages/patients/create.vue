@@ -19,6 +19,7 @@ export default {
                 email: null,
                 dob: null,
                 address: null,
+                user_id: null,
             },
             users: [],
             list: [],
