@@ -12,6 +12,7 @@ export default {
         return {
             title: "Dashboard",
             data: {
+                userRole: "",
                 users: null,
                 doctors: null,
                 patients: null,
@@ -26,6 +27,10 @@ export default {
     middleware: "authentication",
     created() {
         this.get_users()
+    },
+    mounted: function() {
+        const userRoles = JSON.parse(localStorage.getItem("user"));
+        this.userRole = userRoles.role;
     },
     methods: {
         async get_users(){
@@ -72,7 +77,7 @@ export default {
 <div>
     <PageHeader :title="title" />
 
-    <div class="row mt-2">
+    <div class="row mt-2" v-if="userRole !== 'Patient'">
         <!--  -->
         <div class="col-md-3">
             <div class="card">
@@ -148,7 +153,7 @@ export default {
         <!--  -->
     </div>
 
-    <div class="row mt-2">
+    <div class="row mt-2" v-if="userRole !== 'Patient'">
         <!--  -->
         <div class="col-md-3">
             <div class="card">
