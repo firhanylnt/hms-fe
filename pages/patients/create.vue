@@ -20,6 +20,7 @@ export default {
                 dob: null,
                 address: null,
             },
+            users: [],
             list: [],
             list_gender: ['Male', 'Female']
         };
@@ -27,6 +28,7 @@ export default {
     middleware: "authentication",
     created() {
         this.get_list()
+        this.get_users()
     },
     methods: {
         async get_list(){
@@ -35,6 +37,20 @@ export default {
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.list = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_users(){
+            try {
+                const url = `${process.env.apiBaseUrl}/users?role=Patient`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.users = res
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -72,6 +88,22 @@ export default {
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>User</label>
+                                <v-select
+                                    v-model="form.user_id" 
+                                    :options="users" 
+                                    :label="'email'"
+                                    :value="'id'"
+                                    class="style-chooser"
+                                    placeholder="Select User"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col">

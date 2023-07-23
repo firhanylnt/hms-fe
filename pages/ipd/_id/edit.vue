@@ -29,7 +29,7 @@ export default {
             list_patient: [],
             room_type: [],
             list_room: [],
-            list_payment: ['Pribadi', 'BPJS', 'Asuransi']
+            list_payment: ['Individual', 'Insurance']
         };
     },
     middleware: "authentication",
