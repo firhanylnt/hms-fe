@@ -1,5 +1,5 @@
 <script>
-import MetisMenu from "metismenujs/dist/metismenujs";
+// import MetisMenu from "metismenujs/dist/metismenujs";
 import PatientSidebar from "./Sidebar/PatientSidebar.vue";
 import CashierSidebar from "./Sidebar/CashierSidebar.vue";
 import NurseSidebar from "./Sidebar/NurseSidebar.vue";
@@ -107,7 +107,7 @@ export default {
     const userRole = JSON.parse(localStorage.getItem("user"));
     this.role = userRole.role;
 
-    var menuRef = new MetisMenu("#side-menu");
+    // var menuRef = new MetisMenu("#side-menu");
     this._activateMenuDropdown();
 
     this.$router.afterEach((routeTo, routeFrom) => {

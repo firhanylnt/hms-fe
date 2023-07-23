@@ -236,7 +236,7 @@ export default {
     <li class="li-menus" id="menu-opd">
       <nuxt-link to="/opd" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
-        <i class="uil uil-medical-drip"></i>
+        <i class="uil uil-file-medical-alt"></i>
         <span>OPD</span>
       </nuxt-link>
     </li>
