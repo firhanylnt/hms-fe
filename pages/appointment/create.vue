@@ -76,15 +76,17 @@ export default {
           cancelButtonColor: "#f46a6a",
           confirmButtonText: "Yes"
         }).then(async result => {
-          this.form.specialization_id = this.form.specialization_id.id
-          this.form.doctor_id = this.form.doctor_id.id
-          this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
-          console.log('form', this.form)
+          if (result.isConfirmed) {
+            this.form.specialization_id = this.form.specialization_id.id
+            this.form.doctor_id = this.form.doctor_id.id
+            this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
+            console.log('form', this.form)
 
-          const url = `${process.env.apiBaseUrl}/appointments`;
-          await this.$axios.$post(url, this.form).then(res => {
-            this.$router.push(`/appointment`);
-          });
+            const url = `${process.env.apiBaseUrl}/appointments`;
+            await this.$axios.$post(url, this.form).then(res => {
+              this.$router.push(`/appointment`);
+            });
+          }
         });
       } else {
         this.form.specialization_id = this.form.specialization_id.id

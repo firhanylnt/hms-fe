@@ -10,11 +10,13 @@ export default {
     },
     data() {
         return {
-            title: "Create Billing",
+            title: "Create invoice",
             form: {
                 patient_id: null,
                 type: null,
                 total_amount: null,
+                payment_method: null,
+                status: null,
                 details: [{
                     item: null,
                     qty: null,
@@ -23,6 +25,8 @@ export default {
                 }]
             },
             list_type: ['IPD','OPD'],
+            list_payment: ['Individual','Insurance'],
+            list_status: ['Pending','Paid'],
             list_patient: [],
         };
     },
@@ -82,10 +86,10 @@ export default {
 
         async submit() {
             console.log(this.form)
-            const url = `${process.env.apiBaseUrl}/billing`
+            const url = `${process.env.apiBaseUrl}/invoice`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
-                    this.$router.push(`/billing`)
+                    this.$router.push(`/invoice`)
                 })
         }
     }
@@ -144,9 +148,36 @@ export default {
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Payment Method</label>
+                                <v-select
+                                    v-model="form.payment_method" 
+                                    :options="list_payment"
+                                    class="style-chooser"
+                                    placeholder="Select payment"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Status</label>
+                                <v-select
+                                    v-model="form.status" 
+                                    :options="list_status"
+                                    class="style-chooser"
+                                    placeholder="Select status"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="card-body">
-                            <h4>Billing Details</h4>
+                            <h4>Invoice Details</h4>
                             <div class="row mt-4">
                                 <div v-for="(detail, index) in form.details" :key="detail.id" class="row">
                                     <div class="mb-3 col">
@@ -169,14 +200,14 @@ export default {
                                         <input id="name" v-model="detail.subtotal" type="text" name="untyped-input" class="form-control" />
                                     </div>
 
-                                    <div class="col align-self-center">
+                                    <div class="col align-self-center mt-2">
                                         <button type="button" class="btn btn-primary" value="Delete" @click="deleteRow(index)"> Delete </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <button type="button" class="btn btn-success btn-block" @click="AddformData">Add New Row</button>
+                                    <button type="button" class="btn btn-success btn-block" @click="AddformData">Add Item</button>
                                 </div>
                             </div>
                         </div>

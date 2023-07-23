@@ -22,17 +22,25 @@ export default {
         appointment_date: null,
         description: null,
         is_approved: null,
+        is_need_opd: null,
         specialization_id: null
       },
+      user: null,
       list: [],
       list_gender: ["Male", "Female"],
       list_specialization: [],
       list_doctor: [],
+      list_opd: ["Needed", "Not Needed"],
       list_status: ["Approved", "Not Approved Yet"]
     };
   },
   middleware: "authentication",
   created() {
+    let user = JSON.parse(localStorage.getItem('user'))
+    this.user = user
+
+    console.log('this user', user)
+
     this.get_appointment();
     this.get_list_specialization();
   },
@@ -123,20 +131,28 @@ export default {
           cancelButtonColor: "#f46a6a",
           confirmButtonText: "Yes"
         }).then(async result => {
-          this.form.specialization_id = this.form.specialization_id.id
-          this.form.doctor_id = this.form.doctor_id.id
-          this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
-          console.log('form', this.form)
+          if (result.isConfirmed) {
+            this.form.specialization_id = this.form.specialization_id.id
+            this.form.doctor_id = this.form.doctor_id.id
+            this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
+            if (this.form.is_need_opd !== null) {
+              this.form.is_need_opd = this.form.is_need_opd == 'Needed' ? true : false
+            }
+            console.log('form', this.form)
 
-          const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`;
-          await this.$axios.$post(url, this.form).then(res => {
-            this.$router.push(`/appointment`);
-          });
+            const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`;
+            await this.$axios.$post(url, this.form).then(res => {
+              this.$router.push(`/appointment`);
+            });
+          }
         });
       } else {
         this.form.specialization_id = this.form.specialization_id.id
         this.form.doctor_id = this.form.doctor_id.id
         this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
+        if (this.form.is_need_opd !== null) {
+          this.form.is_need_opd = this.form.is_need_opd == 'Needed' ? true : false
+        }
 
         console.log('form', this.form)
 
@@ -288,6 +304,18 @@ export default {
                     placeholder="Input Description"
                     rows="4"
                   ></textarea>
+                </div>
+              </div>
+              <div class="col-md-6" v-if="this.user.role == 'Doctor'">
+                <div class="mb-3">
+                  <label>OPD Status</label>
+                  <v-select
+                    v-model="form.is_need_opd"
+                    :options="list_opd"
+                    class="style-chooser"
+                    placeholder="Select Status"
+                  >
+                  </v-select>
                 </div>
               </div>
             </div>
