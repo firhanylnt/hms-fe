@@ -14,18 +14,48 @@ export default {
       menuItems: menuItems
     };
   },
-  props: {
-    type: {
-      type: String,
-      required: true
-    },
-    width: {
-      type: String,
-      required: true
-    }
-  },
   computed: mapState(["layout"]),
   watch: {
+    type: {
+      immediate: true,
+      handler(newVal, oldVal) {
+        if (newVal !== oldVal) {
+          switch (newVal) {
+            case "dark":
+              document.body.setAttribute("data-sidebar", "dark");
+              document.body.removeAttribute("data-topbar");
+              document.body.removeAttribute("data-sidebar-size");
+              break;
+            case "light":
+              document.body.removeAttribute("data-sidebar");
+              document.body.removeAttribute("data-sidebar-size");
+              document.body.classList.remove("vertical-collpsed");
+              break;
+            case "compact":
+              document.body.setAttribute("data-sidebar-size", "small");
+              document.body.setAttribute("data-sidebar", "dark");
+              document.body.classList.remove("vertical-collpsed");
+              document.body.removeAttribute("data-topbar", "dark");
+              break;
+            case "icon":
+              document.body.setAttribute("data-keep-enlarged", "true");
+              document.body.classList.add("vertical-collpsed");
+              document.body.setAttribute("data-sidebar", "dark");
+              document.body.removeAttribute("data-topbar", "dark");
+              break;
+            case "colored":
+              document.body.setAttribute("data-sidebar", "colored");
+              document.body.removeAttribute("data-keep-enlarged");
+              document.body.classList.remove("vertical-collpsed");
+              document.body.removeAttribute("data-sidebar-size");
+              break;
+            default:
+              document.body.setAttribute("data-sidebar", "dark");
+              break;
+          }
+        }
+      }
+    },
     width: {
       immediate: true,
       handler(newVal, oldVal) {
@@ -70,7 +100,8 @@ export default {
         "menu-blood-banks",
         "menu-pharmacists"
       ],
-      receptionist: [
+      Receptionist: [
+        "menu-dashboard",
         "menu-appointment",
         "menu-ipd",
         "menu-doctors",
@@ -82,7 +113,20 @@ export default {
         "menu-pharmacists",
         "menu-nurses"
       ],
-      patient: ["menu-appointment"]
+      patient: ["menu-appointment"],
+      "Super Admin": [
+        "menu-dashboard",
+        "menu-appointment",
+        "menu-ipd",
+        "menu-doctors",
+        "menu-patients",
+        "menu-bed-management",
+        "menu-medicines",
+        "menu-laboratory",
+        "menu-blood-banks",
+        "menu-pharmacists",
+        "menu-nurses"
+      ]
     };
 
     if (user.role != "admin") {
@@ -184,6 +228,7 @@ export default {
   }
 };
 </script>
+
 <template>
   <ul class="metismenu list-unstyled" id="side-menu">
     <li class="menu-title">Menu</li>
@@ -215,14 +260,14 @@ export default {
     <li class="li-menus" id="menu-doctors">
       <nuxt-link to="/doctors/list" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
-        <i class="uil uil-medical-drip"></i>
+        <i class="mdi mdi-doctor"></i>
         <span>Doctor</span>
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-patiens">
       <nuxt-link to="/patients" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
-        <i class="uil uil-medical-drip"></i>
+        <i class="uil uil-user-plus"></i>
         <span>Patient</span>
       </nuxt-link>
     </li>
