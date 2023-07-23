@@ -26,46 +26,6 @@ export default {
   },
   computed: mapState(["layout"]),
   watch: {
-    type: {
-      immediate: true,
-      handler(newVal, oldVal) {
-        if (newVal !== oldVal) {
-          switch (newVal) {
-            case "dark":
-              document.body.setAttribute("data-sidebar", "dark");
-              document.body.removeAttribute("data-topbar");
-              document.body.removeAttribute("data-sidebar-size");
-              break;
-            case "light":
-              document.body.removeAttribute("data-sidebar");
-              document.body.removeAttribute("data-sidebar-size");
-              document.body.classList.remove("vertical-collpsed");
-              break;
-            case "compact":
-              document.body.setAttribute("data-sidebar-size", "small");
-              document.body.setAttribute("data-sidebar", "dark");
-              document.body.classList.remove("vertical-collpsed");
-              document.body.removeAttribute("data-topbar", "dark");
-              break;
-            case "icon":
-              document.body.setAttribute("data-keep-enlarged", "true");
-              document.body.classList.add("vertical-collpsed");
-              document.body.setAttribute("data-sidebar", "dark");
-              document.body.removeAttribute("data-topbar", "dark");
-              break;
-            case "colored":
-              document.body.setAttribute("data-sidebar", "colored");
-              document.body.removeAttribute("data-keep-enlarged");
-              document.body.classList.remove("vertical-collpsed");
-              document.body.removeAttribute("data-sidebar-size");
-              break;
-            default:
-              document.body.setAttribute("data-sidebar", "dark");
-              break;
-          }
-        }
-      }
-    },
     width: {
       immediate: true,
       handler(newVal, oldVal) {

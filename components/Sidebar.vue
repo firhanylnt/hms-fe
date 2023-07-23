@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       menuItems: menuItems,
-      role: "dsfdsfsd"
+      role: ""
     };
   },
   components: {
@@ -281,7 +281,7 @@ export default {
         <NurseSidebar v-if="role === 'Nurse'" />
         <ReceptionistSidebar v-if="role === 'Receptionist'" />
         <DoctorSidebar v-if="role === 'Doctor'" />
-        <SuperAdminSidebar v-else />
+        <SuperAdminSidebar v-if="role === 'Super Admin'" />
       </div>
       <!-- Sidebar -->
     </div>
