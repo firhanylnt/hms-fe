@@ -1,215 +1,295 @@
 <script>
+import Swal from "sweetalert2";
+
 /**
  * Dashboard component
  */
 export default {
-    head() {
-        return {
-            title: `${this.title} | HMS`,
+  head() {
+    return {
+      title: `${this.title} | HMS`
+    };
+  },
+  data() {
+    return {
+      title: "Create Appointment",
+      form: {
+        doctor_id: null,
+        email: null,
+        phone_number: null,
+        patient_name: null,
+        patient_gender: null,
+        appointment_date: null,
+        payment_method: null,
+        description: null,
+        is_approved: null
+      },
+      list: [],
+      list_gender: ["Male", "Female"],
+      list_specialization: [],
+      list_doctor: [],
+      list_status: ["True", "False"]
+    };
+  },
+  middleware: "authentication",
+  created() {
+    this.get_list_specialization();
+  },
+  methods: {
+    async get_list_specialization() {
+      try {
+        const url = `${process.env.apiBaseUrl}/specialization`;
+        await this.$axios.$get(url).then(res => {
+          this.list_specialization = res;
+        });
+        // Handle the JSON data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
+    async get_list_doctor() {
+      try {
+        const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization}`;
+        await this.$axios.$get(url).then(res => {
+          this.list_doctor = res;
+        });
+        // Handle the JSON data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
+    async submit() {
+      if (this.form.is_approved === "True") {
+        Swal.fire({
+          title: "Are you sure?",
+          text:
+            this.form.doctor_id.name +
+            " will handle Appointment by " +
+            this.form.patien_name +
+            " at " +
+            this.form.appointment_date,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#34c38f",
+          cancelButtonColor: "#f46a6a",
+          confirmButtonText: "Yes"
+        }).then(async result => {
+          const specialization = this.list_specialization.filter(
+            el => el.specialization === this.form.doctor_id.specialization
+          );
+
+          const data = {
+            specialization_id: specialization[0].id,
+            doctor_id: this.form.doctor_id.id,
+            email: this.form.email,
+            phone_number: this.form.phone_number,
+            patient_name: this.form.patien_name,
+            patient_gender: this.form.patient_gender,
+            appointment_date: this.form.appointment_date,
+            description: this.form.description,
+            is_approved: Boolean(this.form.is_approved)
+          };
+
+          console.log(data);
+
+          const url = `${process.env.apiBaseUrl}/appointments`;
+          await this.$axios.$post(url, data).then(res => {
+            this.$router.push(`/appointment`);
+          });
+        });
+      } else {
+        const specialization = this.list_specialization.filter(
+          el => el.specialization === this.form.doctor_id.specialization
+        );
+
+        const data = {
+          specialization_id: specialization[0].id,
+          doctor_id: this.form.doctor_id.id,
+          email: this.form.email,
+          phone_number: this.form.phone_number,
+          patient_name: this.form.patien_name,
+          patient_gender: this.form.patient_gender,
+          appointment_date: this.form.appointment_date,
+          description: this.form.description,
+          is_approved: Boolean(this.form.is_approved)
         };
-    },
-    data() {
-        return {
-            title: "Create Appointment",
-            form: {
-                patient_id: null,
-                doctor_id: null,
-                appointment_date: null,
-                payment_method: null,
-            },
-            list: [],
-            list_gender: ['Male', 'Female'],
-            list_patient: [],
-            list_specialization: [],
-            list_doctor: [],
-            list_payment: ['Pribadi', 'BPJS', 'Asuransi']
-        };
-    },
-    middleware: "authentication",
-    created() {
-        this.get_list_patient()
-        this.get_list_specialization()
-    },
-    methods: {
-        async get_list_patient(){
-            try {
-                const url = `${process.env.apiBaseUrl}/patients`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    console.log(res);
-                    res.map((v) => {
-                        const arr = {
-                            name: v.first_name +' '+ v.last_name,
-                            dob: v.dob,
-                            id: v.id,
-                        }
-                        this.list_patient.push(arr)
-                    })
-                    // this.list_patient = res
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
 
-        async get_list_specialization(){
-            try {
-                const url = `${process.env.apiBaseUrl}/specialization`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    this.list_specialization = res
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
-        
-        async get_list_doctor(){
-            try {
-                const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization}`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    this.list_doctor = res
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
+        console.log(data);
 
-        async submit() {
-            this.form.patient_id = this.form.patient_id.id
-            this.form.doctor_id = this.form.doctor_id.id
-
-            const url = `${process.env.apiBaseUrl}/appointments`
-                await this.$axios.$post(url, this.form)
-                .then((res) => {
-                    this.$router.push(`/appointment`)
-                })
-        }
+        const url = `${process.env.apiBaseUrl}/appointments`;
+        await this.$axios.$post(url, data).then(res => {
+          this.$router.push(`/appointment`);
+        });
+      }
     }
+  }
 };
 </script>
 
 <template>
-<div>
+  <div>
     <div class="row">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-sm-12 col-md-4 mb-3">
-                    <b-button variant="light" @click="$router.back()">
-                        <i class="mdi mdi-arrow-left-bold-outline me-2"></i>
-                        Back
-                    </b-button>
-                </div>
-            </div>
-
-            <!-- detail -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
-
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Patient</label>
-                                <v-select
-                                    v-model="form.patient_id" 
-                                    :options="list_patient"
-                                    :label="'name'" 
-                                    :value="'id'" 
-                                    class="style-chooser"
-                                    placeholder="Select patient"
-                                >
-                                <template #option="{ name, dob }">
-                                    {{ name }} | {{ dob }}
-                                </template>
-
-                                </v-select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Specialization</label>
-                                <v-select
-                                    v-model="form.specialization" 
-                                    :options="list_specialization"
-                                    label="specialization"
-                                    :reduce="list_specialization => list_specialization.specialization" 
-                                    class="style-chooser"
-                                    @input="get_list_doctor"
-                                    placeholder="Select specialization"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Doctor</label>
-                                <v-select
-                                    v-model="form.doctor_id" 
-                                    :options="list_doctor"
-                                    :label="'name'" 
-                                    :value="'id'" 
-                                    class="style-chooser"
-                                    placeholder="Select Docter"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Date</label>
-                                <input v-model="form.appointment_date" type="datetime-local" class="form-control" placeholder="Appointment Date"/>
-                                <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label>Payment Methods</label>
-                                <v-select
-                                    v-model="form.payment_method" 
-                                    :options="list_payment"
-                                    class="style-chooser"
-                                    placeholder="Select Payment Method"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 mt-4">
-                            <div>
-                                <b-button variant="light" @click="$router.back()">
-                                    Cancel
-                                </b-button>
-                                <b-button variant="primary" @click="submit">
-                                    Submit
-                                </b-button>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end -->
+      <div class="col-12">
+        <div class="row">
+          <div class="col-sm-12 col-md-4 mb-3">
+            <b-button variant="light" @click="$router.back()">
+              <i class="mdi mdi-arrow-left-bold-outline me-2"></i>
+              Back
+            </b-button>
+          </div>
         </div>
+
+        <!-- detail -->
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
+
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <label>Patient</label>
+                  <input
+                    v-model="form.patient_name"
+                    type="text"
+                    class="form-control"
+                    placeholder="Patien Name"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label>Patient Gender</label>
+                  <v-select
+                    v-model="form.patient_gender"
+                    :options="list_gender"
+                    class="style-chooser"
+                    placeholder="Select Gender"
+                  >
+                  </v-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <label>Email</label>
+                  <input
+                    v-model="form.email"
+                    type="email"
+                    class="form-control"
+                    placeholder="Email Address"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label>Phone Number</label>
+                  <input
+                    v-model="form.phone_number"
+                    type="text"
+                    class="form-control"
+                    placeholder="Phone Number"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <label>Specialization</label>
+                  <v-select
+                    v-model="form.specialization"
+                    :options="list_specialization"
+                    label="specialization"
+                    :reduce="
+                      list_specialization => list_specialization.specialization
+                    "
+                    class="style-chooser"
+                    @input="get_list_doctor"
+                    placeholder="Select specialization"
+                  >
+                  </v-select>
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label>Doctor</label>
+                  <v-select
+                    v-model="form.doctor_id"
+                    :options="list_doctor"
+                    :label="'name'"
+                    :value="'id'"
+                    class="style-chooser"
+                    placeholder="Select Doctor"
+                  >
+                  </v-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <label>Date</label>
+                  <input
+                    v-model="form.appointment_date"
+                    type="datetime-local"
+                    class="form-control"
+                    placeholder="Appointment Date"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label>Status</label>
+                  <v-select
+                    v-model="form.is_approved"
+                    :options="list_status"
+                    class="style-chooser"
+                    placeholder="Select Status"
+                  >
+                  </v-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label>Description</label>
+                  <textarea
+                    v-model="form.description"
+                    type="text"
+                    class="form-control"
+                    placeholder="Input Description"
+                    rows="4"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 mt-4">
+                <div>
+                  <b-button variant="light" @click="$router.back()">
+                    Cancel
+                  </b-button>
+                  <b-button variant="primary" @click="submit">
+                    Submit
+                  </b-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end -->
+      </div>
     </div>
-    
-</div>
+  </div>
 </template>
 
 <style>
