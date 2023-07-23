@@ -68,6 +68,11 @@ export default {
           sortable: true
         },
         {
+          key: "is_need_opd",
+          label: "OPD Status",
+          sortable: true
+        },
+        {
           label: "Action",
           key: "action"
         }
@@ -201,6 +206,11 @@ export default {
                 </template>
                 <template v-slot:cell(is_approved)="data">
                   <span>{{ data.value ? 'Approved' : 'Not Approved Yet' }}</span>
+                </template>
+                <template v-slot:cell(is_need_opd)="data">
+                  <span>
+                    {{ data.value === true ? 'Needed OPD' : data.value === false ? 'Not Needed' : 'Not Decided Yet' }}
+                  </span>
                 </template>
 
                 <template #cell(action)="row">
