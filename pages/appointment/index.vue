@@ -71,10 +71,6 @@ export default {
           key: "is_need_opd",
           label: "OPD Status",
           sortable: true
-        },
-        {
-          label: "Action",
-          key: "action"
         }
       ]
     };
@@ -83,6 +79,14 @@ export default {
     const userRoles = JSON.parse(localStorage.getItem("user"));
     this.userRole = userRoles.role;
     this.user = userRoles
+
+    if (this.userRole == 'Super Admin' || this.userRole == 'Receptionist' || this.userRole == 'Doctor') {
+      this.fields.push(
+        {
+          label: "Action",
+          key: "action"
+        })
+    }
   },
   computed: {
     /**
@@ -99,9 +103,12 @@ export default {
     async get_data() {
       try {
         let user = JSON.parse(localStorage.getItem("user"));
-        let url = `${process.env.apiBaseUrl}/appointments`;
+        let url = `${process.env.apiBaseUrl}/appointments?`;
         if (user.role != 'Super Admin' && user.role != 'Receptionist') {
-          url += `?user_id=${user.id}`;
+          url += `user_id=${user.id}&`;
+        }
+        if (user.role == 'Patient') {
+          url += `email=${user.email}`
         }
         await this.$axios.$get(url).then(res => {
           console.log(res);
