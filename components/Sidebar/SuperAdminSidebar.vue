@@ -117,6 +117,7 @@ export default {
         "menu-dashboard",
         "menu-appointment",
         "menu-ipd",
+        "menu-opd",
         "menu-doctors",
         "menu-patients",
         "menu-bed-management",
