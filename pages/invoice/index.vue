@@ -77,7 +77,11 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/invoice`;
+        let user = JSON.parse(localStorage.getItem("user"));
+        let url = `${process.env.apiBaseUrl}/invoice`;
+        if (user.role != 'Super Admin' && user.role != 'Receptionist') {
+        url += `/${user.id}`;
+        }
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;

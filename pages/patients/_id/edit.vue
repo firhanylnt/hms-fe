@@ -19,13 +19,16 @@ export default {
                 email: null,
                 dob: null,
                 address: null,
+                user_id: null,
             },
             list: [],
+            users: [],
             list_gender: ['Male', 'Female']
         };
     },
     middleware: "authentication",
     created() {
+        this.get_users()
         this.get_patient()
     },
     methods: {
@@ -34,7 +37,6 @@ export default {
                 const url = `${process.env.apiBaseUrl}/patients/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    console.log(res);
                     this.form.first_name = res.first_name
                     this.form.last_name = res.last_name
                     this.form.dob = this.convert_date(res.dob)
@@ -42,6 +44,24 @@ export default {
                     this.form.phone = res.phone
                     this.form.gender = res.gender
                     this.form.address = res.address
+
+                    const x = this.users.find(o => parseInt(o.id) === res.user_id)
+                    console.log(x);
+                    this.form.user_id = x
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_users(){
+            try {
+                const url = `${process.env.apiBaseUrl}/users?role=Patient`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.users = res
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -93,6 +113,22 @@ export default {
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>User</label>
+                                <v-select
+                                    v-model="form.user_id" 
+                                    :options="users" 
+                                    label="email"
+                                    :reduce="users => users.id"
+                                    class="style-chooser"
+                                    placeholder="Select User"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col">
@@ -126,15 +162,6 @@ export default {
                             <div class="mb-3">
                                 <label>Date of Birth</label>
                                 <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input v-model="form.email" type="text" class="form-control" placeholder="Input email"/>
                             </div>
                         </div>
                         <div class="col">

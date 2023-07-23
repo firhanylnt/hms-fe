@@ -97,7 +97,7 @@ export default {
                                     v-model="form.user_id" 
                                     :options="users" 
                                     :label="'email'"
-                                    :value="'id'"
+                                    :reduce="users => users.id"
                                     class="style-chooser"
                                     placeholder="Select User"
                                 >
@@ -138,15 +138,6 @@ export default {
                             <div class="mb-3">
                                 <label>Date of Birth</label>
                                 <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input v-model="form.email" type="text" class="form-control" placeholder="Input email"/>
                             </div>
                         </div>
                         <div class="col">

@@ -126,7 +126,6 @@ export default {
         "menu-blood-banks",
         "menu-pharmacists",
         "menu-nurses",
-        "menu-billing",
         "menu-invoices",
         "menu-users",
         "menu-track-record",
@@ -266,7 +265,6 @@ export default {
     </li>
     <li class="li-menus" id="menu-billing">
       <nuxt-link to="/billing" class="side-nav-link-ref">
-        <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-bill"></i>
         <span>Billing</span>
       </nuxt-link>
