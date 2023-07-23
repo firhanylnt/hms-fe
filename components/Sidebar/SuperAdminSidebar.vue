@@ -11,7 +11,7 @@ import { menuItems } from "../menu";
 export default {
   data() {
     return {
-      menuItems: menuItems,
+      menuItems: menuItems
     };
   },
   props: {
@@ -247,6 +247,27 @@ export default {
         <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-medical-drip"></i>
         <span>IPD</span>
+      </nuxt-link>
+    </li>
+    <li class="li-menus" id="menu-opd">
+      <nuxt-link to="/opd" class="side-nav-link-ref">
+        <!-- <i class="fas fa-home"></i> -->
+        <i class="uil uil-medical-drip"></i>
+        <span>OPD</span>
+      </nuxt-link>
+    </li>
+    <li class="li-menus" id="menu-billing">
+      <nuxt-link to="/billing" class="side-nav-link-ref">
+        <!-- <i class="fas fa-home"></i> -->
+        <i class="uil uil-clipboard-notes"></i>
+        <span>Billing</span>
+      </nuxt-link>
+    </li>
+    <li class="li-menus" id="menu-invoices">
+      <nuxt-link to="/invoice" class="side-nav-link-ref">
+        <!-- <i class="fas fa-home"></i> -->
+        <i class="uil uil-medical-drip"></i>
+        <span>Invoices</span>
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-doctors">
