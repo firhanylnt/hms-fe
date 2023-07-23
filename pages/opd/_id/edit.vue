@@ -10,89 +10,54 @@ export default {
     },
     data() {
         return {
-            title: "Edit Appointment",
+            title: "Edit opd Patient",
             form: {
                 patient_id: null,
-                doctor_id: null,
-                appointment_date: null,
+                room_id: null,
+                room_type: null,
+                blood_pressure: null,
+                height: null,
+                weight: null,
+                admission_date: null,
                 payment_method: null,
+                symptoms: null,
+                notes: null,
+                is_active: null,
             },
             list: [],
             list_gender: ['Male', 'Female'],
             list_patient: [],
-            list_specialization: [],
-            list_doctor: [],
-            list_payment: ['Pribadi', 'BPJS', 'Asuransi']
+            room_type: [],
+            list_room: [],
+            list_payment: ['Individual', 'Insurance']
         };
     },
     middleware: "authentication",
-    created() {
-        this.get_appointment()
+    async created() {
+        await this.get_data()
         this.get_list_patient()
-        this.get_list_specialization()
+        this.get_room_type()
+        this.get_list_room()
     },
     methods: {
-        async get_appointment(){
+        async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`
+                const url = `${process.env.apiBaseUrl}/opd/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.form.patient_id = { id: res.patient_id, name: res.patient_first_name + ' ' + res.patient_last_name };
-                    this.form.doctor_id = { id: res.doctor_id, name: res.doctor_name };
-                    this.form.specialization = res.specialization
-                    this.form.appointment_date = this.convert_date(res.date)
-                    this.get_list_doctor()
-                    this.form.payment_method = res.payment
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
+                    this.form.room_id = { id: res.room_id, number: res.room_number };
+                    this.form.room_type = res.room_type
+                    this.form.blood_pressure = res.blood_pressure
+                    this.form.height = res.height
+                    this.form.weight = res.weight
+                    this.form.payment_method = res.payment_method
+                    this.form.admission_date = this.convert_date(res.admission_date)
+                    this.form.symptoms = res.symptoms
+                    this.form.notes = res.notes
+                    this.form.is_active = res.is_active ? '1' : 0
 
-        async get_list_patient(){
-            try {
-                const url = `${process.env.apiBaseUrl}/patients`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    res.map((v) => {
-                        const arr = {
-                            name: v.first_name +' '+ v.last_name,
-                            dob: v.dob,
-                            id: v.id
-                        }
-                        this.list_patient.push(arr)
-                    })
-                    // this.list_patient = res
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
-
-        async get_list_specialization(){
-            try {
-                const url = `${process.env.apiBaseUrl}/specialization`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    this.list_specialization = res
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
-        },
-        
-        async get_list_doctor(){
-            try {
-                const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization}`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    this.list_doctor = res
+                    console.log('init form', this.form)
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -121,14 +86,67 @@ export default {
             return localDatetime;
         },
 
+        async get_list_patient(){
+            try {
+                const url = `${process.env.apiBaseUrl}/patients`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    console.log(res);
+                    res.map((v) => {
+                        const arr = {
+                            name: v.first_name +' '+ v.last_name,
+                            dob: v.dob,
+                            id: v.id
+                        }
+                        this.list_patient.push(arr)
+                    })
+                    // this.list_patient = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_room_type(){
+            try {
+                const url = `${process.env.apiBaseUrl}/room-types`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.room_type = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_list_room(){
+            try {
+                const url = `${process.env.apiBaseUrl}/rooms?roomType=${this.form.room_type}`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    console.log('list room', res)
+                    this.list_room = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
         async submit() {
             this.form.patient_id = this.form.patient_id.id
-            this.form.doctor_id = this.form.doctor_id.id
+            this.form.room_id = this.form.room_id.id
+            this.form.is_active = this.form.is_active == '1' ? true : false
 
-            const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/opd/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
-                    this.$router.push(`/appointment`)
+                    this.$router.push(`/opd`)
                 })
         }
     }
@@ -153,7 +171,6 @@ export default {
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
 
-
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
@@ -173,19 +190,25 @@ export default {
                                 </v-select>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col">
                             <div class="mb-3">
-                                <label>Specialization</label>
-                                <v-select
-                                    v-model="form.specialization" 
-                                    :options="list_specialization"
-                                    label="specialization"
-                                    :reduce="list_specialization => list_specialization.specialization" 
-                                    class="style-chooser"
-                                    @input="get_list_doctor"
-                                    placeholder="Select specialization"
-                                >
-                                </v-select>
+                                <label>Blood Pressure</label>
+                                <input v-model="form.blood_pressure" type="text" class="form-control" placeholder="Blood Pressure"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Height</label>
+                                <input v-model="form.height" type="text" class="form-control" placeholder="Height"/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Weight</label>
+                                <input v-model="form.weight" type="text" class="form-control" placeholder="Weight"/>
                             </div>
                         </div>
                     </div>
@@ -193,29 +216,12 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
-                                <label>Doctor</label>
-                                <v-select
-                                    v-model="form.doctor_id" 
-                                    :options="list_doctor"
-                                    :label="'name'"
-                                    :value="'id'"
-                                    class="style-chooser"
-                                    placeholder="Select Docter"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Date</label>
-                                <input v-model="form.appointment_date" type="datetime-local" class="form-control" placeholder="Appointment Date"/>
+                                <label>Admission Date</label>
+                                <input v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="opd Date"/>
                                 <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col">
                             <div class="mb-3">
                                 <label>Payment Methods</label>
                                 <v-select
@@ -226,6 +232,33 @@ export default {
                                 >
                                 </v-select>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label>Symptoms</label>
+                            <textarea class="form-control" v-model="form.symptoms" rows="6"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <label>Notes</label>
+                            <textarea class="form-control" v-model="form.notes" rows="6"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <label>Status</label>
+                        <div class="col-md-12">
+                            <b-form-checkbox
+                            v-model="form.is_active"
+                            class="mb-3"
+                            plain
+                            value="1"
+                            unchecked-value="0"
+                            >Active</b-form-checkbox>
                         </div>
                     </div>
 

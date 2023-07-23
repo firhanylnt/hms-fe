@@ -11,9 +11,8 @@ export default {
   },
   data() {
     return {
-      title: "Appointment",
+      title: "Track Record Medical",
       userRole: "",
-      user: null,
       tableData: [],
       totalRows: 1,
       currentPage: 1,
@@ -28,53 +27,19 @@ export default {
       sortDesc: false,
       fields: [
         {
-          key: "id",
-          label: "Appointment ID",
+          key: "date",
+          label: "Date visit",
           sortable: true
         },
         {
-          key: "patient_name",
-          label: "Patient",
+          key: "diagonis",
+          label: "Diagonis",
           sortable: true
-        },
-        {
-          key: "email",
-          label: "Patient Email",
-          sortable: false
-        },
-        {
-          key: "phone_number",
-          label: "Patient Phone Number",
-          sortable: false
         },
         {
           key: "doctor",
           label: "Doctor",
           sortable: true
-        },
-        {
-          key: "specialization",
-          label: "Specialization",
-          sortable: true
-        },
-        {
-          key: "appointment_date",
-          label: "Date",
-          sortable: true
-        },
-        {
-          key: "is_approved",
-          label: "Status",
-          sortable: true
-        },
-        {
-          key: "is_need_opd",
-          label: "OPD Status",
-          sortable: true
-        },
-        {
-          label: "Action",
-          key: "action"
         }
       ]
     };
@@ -82,7 +47,6 @@ export default {
   mounted: function() {
     const userRoles = JSON.parse(localStorage.getItem("user"));
     this.userRole = userRoles.role;
-    this.user = userRoles
   },
   computed: {
     /**
@@ -98,11 +62,7 @@ export default {
   methods: {
     async get_data() {
       try {
-        let user = JSON.parse(localStorage.getItem("user"));
-        let url = `${process.env.apiBaseUrl}/appointments`;
-        if (user.role != 'Super Admin' && user.role != 'Receptionist') {
-          url += `?user_id=${user.id}`;
-        }
+        const url = `${process.env.apiBaseUrl}/appointment`;
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;
@@ -138,7 +98,7 @@ export default {
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          const url = `${process.env.apiBaseUrl}/appointments/delete/${id}`;
+          const url = `${process.env.apiBaseUrl}/appointment/delete/${id}`;
           await this.$axios.$post(url).then(() => {
             Swal.fire("Deleted!", "Appointment has been deleted.", "success");
             this.get_data();
@@ -161,14 +121,10 @@ export default {
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12 col-md-12">
-                <div>
-                  <b-button
-                    variant="success"
-                    @click="create"
-                    v-if="userRole !== 'Patient'"
-                  >
+                <div v-if="role === 'Cashier'">
+                  <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Appointment
+                    Create Invoices
                   </b-button>
                 </div>
               </div>
@@ -198,21 +154,6 @@ export default {
                 :filter-included-fields="filterOn"
                 @filtered="onFiltered"
               >
-                <template v-slot:cell(doctor)="data">
-                  <span>{{ data.value === null || data.value === '' ? '-' : data.value }}</span>
-                </template>
-                <template v-slot:cell(appointment_date)="data">
-                  <span>{{ new Date(data.value) }}</span>
-                </template>
-                <template v-slot:cell(is_approved)="data">
-                  <span>{{ data.value ? 'Approved' : 'Not Approved Yet' }}</span>
-                </template>
-                <template v-slot:cell(is_need_opd)="data">
-                  <span>
-                    {{ data.value === true ? 'Needed OPD' : data.value === false ? 'Not Needed' : 'Not Decided Yet' }}
-                  </span>
-                </template>
-
                 <template #cell(action)="row">
                   <b-button
                     variant="warning"
