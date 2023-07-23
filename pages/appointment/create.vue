@@ -15,12 +15,12 @@ export default {
       title: "Create Appointment",
       form: {
         doctor_id: null,
+        specialization_id: null,
         email: null,
         phone_number: null,
         patient_name: null,
         patient_gender: null,
         appointment_date: null,
-        payment_method: null,
         description: null,
         is_approved: null
       },
@@ -28,7 +28,7 @@ export default {
       list_gender: ["Male", "Female"],
       list_specialization: [],
       list_doctor: [],
-      list_status: ["True", "False"]
+      list_status: ["Approved", "Not Approved Yet"]
     };
   },
   middleware: "authentication",
@@ -50,7 +50,7 @@ export default {
 
     async get_list_doctor() {
       try {
-        const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization}`;
+        const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization_id.specialization}`;
         await this.$axios.$get(url).then(res => {
           this.list_doctor = res;
         });
@@ -61,7 +61,7 @@ export default {
     },
 
     async submit() {
-      if (this.form.is_approved === "True") {
+      if (this.form.is_approved == 'Approved') {
         Swal.fire({
           title: "Are you sure?",
           text:
@@ -76,54 +76,25 @@ export default {
           cancelButtonColor: "#f46a6a",
           confirmButtonText: "Yes"
         }).then(async result => {
-          const specialization = this.list_specialization.filter(
-            el => el.specialization === this.form.doctor_id.specialization
-          );
-
-          let boolString = "True";
-
-          const data = {
-            specialization_id: specialization[0].id,
-            doctor_id: this.form.doctor_id.id,
-            email: this.form.email,
-            phone_number: this.form.phone_number,
-            patient_name: this.form.patient_name,
-            patient_gender: this.form.patient_gender,
-            appointment_date: this.form.appointment_date,
-            description: this.form.description,
-            is_approved: boolString === this.form.is_approved
-          };
-
-          console.log(data);
+          this.form.specialization_id = this.form.specialization_id.id
+          this.form.doctor_id = this.form.doctor_id.id
+          this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
+          console.log('form', this.form)
 
           const url = `${process.env.apiBaseUrl}/appointments`;
-          await this.$axios.$post(url, data).then(res => {
+          await this.$axios.$post(url, this.form).then(res => {
             this.$router.push(`/appointment`);
           });
         });
       } else {
-        const specialization = this.list_specialization.filter(
-          el => el.specialization === this.form.doctor_id.specialization
-        );
+        this.form.specialization_id = this.form.specialization_id.id
+        this.form.doctor_id = this.form.doctor_id.id
+        this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
 
-        let boolString = "True";
-
-        const data = {
-          specialization_id: specialization[0].id,
-          doctor_id: this.form.doctor_id.id,
-          email: this.form.email,
-          phone_number: this.form.phone_number,
-          patient_name: this.form.patient_name,
-          patient_gender: this.form.patient_gender,
-          appointment_date: this.form.appointment_date,
-          description: this.form.description,
-          is_approved: boolString === this.form.is_approved
-        };
-
-        console.log(data);
+        console.log('form', this.form)
 
         const url = `${process.env.apiBaseUrl}/appointments`;
-        await this.$axios.$post(url, data).then(res => {
+        await this.$axios.$post(url, this.form).then(res => {
           this.$router.push(`/appointment`);
         });
       }
@@ -206,12 +177,10 @@ export default {
                 <div class="mb-3">
                   <label>Specialization</label>
                   <v-select
-                    v-model="form.specialization"
+                    v-model="form.specialization_id"
                     :options="list_specialization"
-                    label="specialization"
-                    :reduce="
-                      list_specialization => list_specialization.specialization
-                    "
+                    :label="'specialization'"
+                    :value="'id'"
                     class="style-chooser"
                     @input="get_list_doctor"
                     placeholder="Select specialization"
