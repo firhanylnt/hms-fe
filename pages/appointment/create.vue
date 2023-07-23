@@ -80,6 +80,8 @@ export default {
             el => el.specialization === this.form.doctor_id.specialization
           );
 
+          let boolString = "True";
+
           const data = {
             specialization_id: specialization[0].id,
             doctor_id: this.form.doctor_id.id,
@@ -89,7 +91,7 @@ export default {
             patient_gender: this.form.patient_gender,
             appointment_date: this.form.appointment_date,
             description: this.form.description,
-            is_approved: Boolean(this.form.is_approved)
+            is_approved: boolString === this.form.is_approved
           };
 
           console.log(data);
@@ -104,16 +106,18 @@ export default {
           el => el.specialization === this.form.doctor_id.specialization
         );
 
+        let boolString = "True";
+
         const data = {
           specialization_id: specialization[0].id,
           doctor_id: this.form.doctor_id.id,
           email: this.form.email,
           phone_number: this.form.phone_number,
-          patient_name: this.form.patien_name,
+          patient_name: this.form.patient_name,
           patient_gender: this.form.patient_gender,
           appointment_date: this.form.appointment_date,
           description: this.form.description,
-          is_approved: Boolean(this.form.is_approved)
+          is_approved: boolString === this.form.is_approved
         };
 
         console.log(data);
