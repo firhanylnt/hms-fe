@@ -99,7 +99,7 @@ export default {
     },
 
     move(id) {
-      this.$router.push(`/billing/${id}/edit`);
+      this.$router.push(`/billing/${id}/view`);
     },
 
     confirm(id) {
@@ -172,16 +172,16 @@ export default {
               <template #cell(total_amount)="row">
                 <span>${{ row.item.total_amount }}</span>
               </template>
-                <template v-if="userRole === 'Cashier' || userRole === 'Super Admin'" #cell(action)="row">
-                  <b-button
-                    variant="warning"
+                <template #cell(action)="row">
+                  <b-button v-if="userRole === 'Cashier' || userRole === 'Super Admin' || userRole === 'Patient'"
+                    variant="info"
                     size="sm"
                     @click="move(row.item.id)"
                     class="mr-2"
                   >
-                    Edit
+                    View
                   </b-button>
-                  <b-button
+                  <b-button v-if="userRole === 'Cashier' || userRole === 'Super Admin'"
                     variant="danger"
                     size="sm"
                     @click="confirm(row.item.id)"
