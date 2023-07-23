@@ -19,7 +19,7 @@
       <nuxt-link to="/invoice" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-invoice"></i>
-        <span>Invoices</span>
+        <span>Invoice</span>
       </nuxt-link>
     </li>
   </ul>

@@ -1,213 +1,77 @@
 <script>
-import Swal from "sweetalert2";
-/**
- * Dashboard component
- */
+
+import Appointment from '../../components/Trm/Appointment.vue';
+
+import History from '../../components/Trm/History.vue';
+
+
 export default {
-  head() {
-    return {
-      title: `${this.title} | HMS`
-    };
-  },
-  data() {
-    return {
-      title: "Track Record Medical",
-      userRole: "",
-      tableData: [],
-      totalRows: 1,
-      currentPage: 1,
-      perPage: 10,
-      pageOptions: [10, 25, 50, 100],
-      filter: null,
-      filterOn: [],
-      // sortBy: "id",
-      searchmodal: null,
-      searchVoucher: false,
-      vmessage: null,
-      sortDesc: false,
-      fields: [
-        {
-          key: "date",
-          label: "Date visit",
-          sortable: true
-        },
-        {
-          key: "diagonis",
-          label: "Diagonis",
-          sortable: true
-        },
-        {
-          key: "doctor",
-          label: "Doctor",
-          sortable: true
-        }
-      ]
-    };
-  },
-  mounted: function() {
-    const userRoles = JSON.parse(localStorage.getItem("user"));
-    this.userRole = userRoles.role;
-  },
-  computed: {
-    /**
-     * Total no. of records
-     */
-    rows() {
-      return this.tableData.length;
-    }
-  },
-  created() {
-    this.get_data();
-  },
-  methods: {
-    async get_data() {
-      try {
-        const url = `${process.env.apiBaseUrl}/appointment`;
-        await this.$axios.$get(url).then(res => {
-          console.log(res);
-          this.tableData = res;
-        });
-        // Handle the JSON data
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    head() {
+        return {
+            title: `${this.title} | HMS`,
+        };
     },
-
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
-
-    create() {
-      this.$router.push(`/appointment/create`);
-    },
-
-    move(id) {
-      this.$router.push(`/appointment/${id}/edit`);
-    },
-
-    confirm(id) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#34c38f",
-        cancelButtonColor: "#f46a6a",
-        confirmButtonText: "Yes, delete it!"
-      }).then(async result => {
-        if (result.value) {
-          const url = `${process.env.apiBaseUrl}/appointment/delete/${id}`;
-          await this.$axios.$post(url).then(() => {
-            Swal.fire("Deleted!", "Appointment has been deleted.", "success");
-            this.get_data();
-          });
-        }
-      });
-    }
-  },
-  middleware: "authentication"
+    components: { Appointment, History }
 };
 </script>
 
 <template>
-  <div>
-    <PageHeader :title="title" />
-
+<div>
     <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
+        <div class="col-12">
             <div class="row">
-              <div class="col-sm-12 col-md-12">
-                <div v-if="role === 'Cashier'">
-                  <b-button variant="success" @click="create">
-                    <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Invoices
-                  </b-button>
+                <div class="col-sm-12 col-md-4 mb-3">
+                    <b-button variant="light" @click="$router.back()">
+                        <i class="mdi mdi-arrow-left-bold-outline me-2"></i>
+                        Back
+                    </b-button>
                 </div>
-              </div>
             </div>
-            <div class="row mt-4">
-              <div class="col-sm-12 col-md-4">
-                <div>
-                  <b-form-input
-                    v-model="filter"
-                    type="search"
-                    placeholder="Search"
-                  ></b-form-input>
+
+            <!-- detail -->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
+                    <b-tabs justified nav-class="nav-tabs-custom" content-class="p-3 text-muted">
+                        <b-tab active>
+                            <template v-slot:title>
+                                <span class="d-inline-block d-sm-none">
+                                    <i class="fas fa-home"></i>
+                                </span>
+                                <span class="d-none d-sm-inline-block">Appointment</span>
+                            </template>
+                           <Appointment />
+                        </b-tab>
+                        <b-tab>
+                            <template v-slot:title>
+                                <span class="d-inline-block d-sm-none">
+                                    <i class="far fa-user"></i>
+                                </span>
+                                <span class="d-none d-sm-inline-block">IPD/OPD</span>
+                            </template>
+                            <History />
+                        </b-tab>
+                    </b-tabs>
                 </div>
-              </div>
             </div>
-            <!-- Table -->
-            <div class="table-responsive mb-0 mt-4">
-              <b-table
-                :items="tableData"
-                :fields="fields"
-                responsive="sm"
-                :per-page="perPage"
-                :current-page="currentPage"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-                :filter="filter"
-                :filter-included-fields="filterOn"
-                @filtered="onFiltered"
-              >
-                <template #cell(action)="row">
-                  <b-button
-                    variant="warning"
-                    size="sm"
-                    @click="move(row.item.id)"
-                    class="mr-2"
-                  >
-                    Edit
-                  </b-button>
-                  <b-button
-                    variant="danger"
-                    size="sm"
-                    @click="confirm(row.item.id)"
-                    class="mr-2"
-                  >
-                    Delete
-                  </b-button>
-                </template>
-              </b-table>
-            </div>
-            <div class="row">
-              <div class="col-sm-12 col-md-6">
-                <div id="tickets-table_length" class="dataTables_length">
-                  <label class="d-inline-flex align-items-center">
-                    Show&nbsp;
-                    <b-form-select
-                      v-model="perPage"
-                      size="sm"
-                      :options="pageOptions"
-                    ></b-form-select
-                    >&nbsp;entries
-                  </label>
-                </div>
-              </div>
-              <div class="col-sm-12 col-md-6">
-                <div
-                  class="dataTables_paginate paging_simple_numbers float-end"
-                >
-                  <ul class="pagination pagination-rounded mb-0">
-                    <!-- pagination -->
-                    <b-pagination
-                      v-model="currentPage"
-                      :total-rows="rows"
-                      :per-page="perPage"
-                    ></b-pagination>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+            <!-- end -->
         </div>
-      </div>
     </div>
-  </div>
+    
+</div>
 </template>
 
-<style></style>
+<style>
+.style-chooser .vs__search::placeholder,
+.style-chooser .vs__dropdown-toggle,
+.style-chooser .vs__dropdown-menu,
+.style-chooser .vs__selected {
+  font-size: 14px;
+  padding: 0.3em !important;
+}
+
+.style-chooser .vs__clear,
+.style-chooser .vs__open-indicator {
+  font-size: 14px;
+}
+</style>

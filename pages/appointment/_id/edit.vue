@@ -20,16 +20,15 @@ export default {
         patient_name: null,
         patient_gender: null,
         appointment_date: null,
-        payment_method: null,
         description: null,
         is_approved: null,
-        specialization: null
+        specialization_id: null
       },
       list: [],
       list_gender: ["Male", "Female"],
       list_specialization: [],
       list_doctor: [],
-      list_status: ["True", "False"]
+      list_status: ["Approved", "Not Approved Yet"]
     };
   },
   middleware: "authentication",
@@ -46,14 +45,15 @@ export default {
           this.form.email = res.email;
           this.form.phone_number = res.phone_number;
           this.form.description = res.description;
-          this.form.is_approved = res.is_approved;
+          this.form.is_approved = res.is_approved ? 'Approved' : 'Not Approved Yet';
           this.form.patient_gender = res.patient_gender;
-          this.form.doctor_id = res.doctor;
-          this.form.specialization = res.specialization;
+          this.form.doctor_id = {id: res.doctor_id, name: res.doctor};
+          this.form.specialization_id = {id: res.specialization_id, specialization: res.specialization};
           this.get_list_doctor();
           this.form.appointment_date = this.convert_date(res.date);
-
           //   this.form.payment_method = res.payment;
+
+          console.log('init form', this.form)
         });
         // Handle the JSON data
       } catch (error) {
@@ -75,7 +75,7 @@ export default {
 
     async get_list_doctor() {
       try {
-        const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization}`;
+        const url = `${process.env.apiBaseUrl}/doctors?specialization=${this.form.specialization_id.specialization}`;
         await this.$axios.$get(url).then(res => {
           this.list_doctor = res;
 
@@ -108,11 +108,11 @@ export default {
     },
 
     async submit() {
-      if (Boolean(this.form.is_approved)) {
+      if (this.form.is_approved == 'Approved') {
         Swal.fire({
           title: "Are you sure?",
           text:
-            this.form.doctor_id +
+            this.form.doctor_id.name +
             " will handle Appointment by " +
             this.form.patient_name +
             " at " +
@@ -123,60 +123,25 @@ export default {
           cancelButtonColor: "#f46a6a",
           confirmButtonText: "Yes"
         }).then(async result => {
-          const specialization = this.list_specialization.filter(
-            el => el.specialization === this.form.specialization
-          );
-
-          const getDoctor = this.list_doctor.filter(
-            el => el.name === this.form.doctor_id
-          );
-
-          const data = {
-            specialization_id: specialization[0].id,
-            doctor_id: getDoctor[0].id,
-            email: this.form.email,
-            phone_number: this.form.phone_number,
-            patient_name: this.form.patient_name,
-            patient_gender: this.form.patient_gender,
-            appointment_date: this.form.appointment_date,
-            description: this.form.description,
-            is_approved: Boolean(this.form.is_approved)
-          };
-
-          //   console.log(this.list_doctor);
-          //   console.log(getDoctor);
-          console.log(data);
+          this.form.specialization_id = this.form.specialization_id.id
+          this.form.doctor_id = this.form.doctor_id.id
+          this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
+          console.log('form', this.form)
 
           const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`;
-          await this.$axios.$post(url, data).then(res => {
+          await this.$axios.$post(url, this.form).then(res => {
             this.$router.push(`/appointment`);
           });
         });
       } else {
-        const specialization = this.list_specialization.filter(
-          el => el.specialization === this.form.specialization
-        );
+        this.form.specialization_id = this.form.specialization_id.id
+        this.form.doctor_id = this.form.doctor_id.id
+        this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
 
-        const getDoctor = this.list_doctor.filter(
-          el => el.name === this.form.doctor_id
-        );
-
-        const data = {
-          specialization_id: specialization[0].id,
-          doctor_id: getDoctor[0].id,
-          email: this.form.email,
-          phone_number: this.form.phone_number,
-          patient_name: this.form.patient_name,
-          patient_gender: this.form.patient_gender,
-          appointment_date: this.form.appointment_date,
-          description: this.form.description,
-          is_approved: Boolean(this.form.is_approved)
-        };
-
-        console.log(data);
+        console.log('form', this.form)
 
         const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`;
-        await this.$axios.$post(url, data).then(res => {
+        await this.$axios.$post(url, this.form).then(res => {
           this.$router.push(`/appointment`);
         });
       }
@@ -259,13 +224,10 @@ export default {
                 <div class="mb-3">
                   <label>Specialization</label>
                   <v-select
-                    v-model="form.specialization"
+                    v-model="form.specialization_id"
                     :options="list_specialization"
-                    :value="'specialization'"
-                    label="specialization"
-                    :reduce="
-                      list_specialization => list_specialization.specialization
-                    "
+                    :value="'id'"
+                    :label="'specialization'"
                     class="style-chooser"
                     @input="get_list_doctor"
                     placeholder="Select specialization"
