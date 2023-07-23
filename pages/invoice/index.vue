@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      title: "Invoices",
+      title: "invoice",
       userRole: "",
       tableData: [],
       totalRows: 1,
@@ -27,30 +27,35 @@ export default {
       sortDesc: false,
       fields: [
         {
-          key: "id",
-          label: "Invoices ID",
-          sortable: true
-        },
-        {
           key: "code",
-          label: "Code",
+          label: "invoice Code",
           sortable: true
         },
         {
-          key: "amount",
-          label: "Amount",
+          key: "name",
+          label: "Patient",
           sortable: true
         },
         {
-          key: "status",
-          label: "Status",
+          key: "type",
+          label: "Type",
           sortable: true
         },
         {
-          key: "created_at",
-          label: "Created At",
+          key: "total_amount",
+          label: "Total Amount",
           sortable: true
-        }
+        },
+        {
+          key: "invoice_date",
+          label: "invoice Date",
+          sortable: true
+        },
+        {
+          key: "action",
+          label: "Action",
+          sortable: true
+        },
       ]
     };
   },
@@ -72,7 +77,7 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/appointment`;
+        const url = `${process.env.apiBaseUrl}/invoice`;
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;
@@ -90,11 +95,11 @@ export default {
     },
 
     create() {
-      this.$router.push(`/appointment/create`);
+      this.$router.push(`/invoice/create`);
     },
 
     move(id) {
-      this.$router.push(`/appointment/${id}/edit`);
+      this.$router.push(`/invoice/${id}/view`);
     },
 
     confirm(id) {
@@ -108,9 +113,9 @@ export default {
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          const url = `${process.env.apiBaseUrl}/appointment/delete/${id}`;
+          const url = `${process.env.apiBaseUrl}/invoice/delete/${id}`;
           await this.$axios.$post(url).then(() => {
-            Swal.fire("Deleted!", "Appointment has been deleted.", "success");
+            Swal.fire("Deleted!", "invoice has been deleted.", "success");
             this.get_data();
           });
         }
@@ -131,10 +136,10 @@ export default {
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12 col-md-12">
-                <div v-if="userRole === 'Cashier'">
+                <div v-if="userRole === 'Cashier' || userRole === 'Super Admin'">
                   <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
-                    Create Invoices
+                    Create invoice
                   </b-button>
                 </div>
               </div>
@@ -164,16 +169,19 @@ export default {
                 :filter-included-fields="filterOn"
                 @filtered="onFiltered"
               >
+              <template #cell(total_amount)="row">
+                <span>${{ row.item.total_amount }}</span>
+              </template>
                 <template #cell(action)="row">
-                  <b-button
-                    variant="warning"
+                  <b-button v-if="userRole === 'Cashier' || userRole === 'Super Admin' || userRole === 'Patient'"
+                    variant="info"
                     size="sm"
                     @click="move(row.item.id)"
                     class="mr-2"
                   >
-                    Edit
+                    View
                   </b-button>
-                  <b-button
+                  <b-button v-if="userRole === 'Cashier' || userRole === 'Super Admin'"
                     variant="danger"
                     size="sm"
                     @click="confirm(row.item.id)"
