@@ -125,7 +125,10 @@ export default {
         "menu-laboratory",
         "menu-blood-banks",
         "menu-pharmacists",
-        "menu-nurses"
+        "menu-nurses",
+        "menu-billing",
+        "menu-invoices",
+        "menu-users"
       ]
     };
 
