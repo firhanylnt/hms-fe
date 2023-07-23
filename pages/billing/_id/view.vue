@@ -15,12 +15,7 @@ export default {
                 patient_id: null,
                 type: null,
                 total_amount: null,
-                details: [{
-                    item: null,
-                    qty: null,
-                    price: null,
-                    subtotal: null,
-                }]
+                details: []
             },
             list_type: ['IPD','OPD'],
             list_patient: [],
@@ -29,8 +24,27 @@ export default {
     middleware: "authentication",
     created() {
         this.get_list_patient()
+        this.get_data()
     },
     methods: {
+        async get_data(){
+            try {
+                const url = `${process.env.apiBaseUrl}/billing/view/${this.$route.params.id}`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.form.patient_id = res.billing.patient_id
+                    this.form.type = res.billing.type
+                    this.form.total_amount = res.billing.total_amount
+                    this.form.details = res.details
+                    
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
         async get_list_patient(){
             try {
                 const url = `${process.env.apiBaseUrl}/patients`
@@ -116,6 +130,7 @@ export default {
                             <div class="mb-3">
                                 <label>Patient</label>
                                 <v-select
+                                disabled="disabled"
                                     v-model="form.patient_id" 
                                     :options="list_patient"
                                     :label="'name'" 
@@ -134,6 +149,7 @@ export default {
                             <div class="mb-3">
                                 <label>Type</label>
                                 <v-select
+                                disabled="disabled"
                                     v-model="form.type" 
                                     :options="list_type"
                                     class="style-chooser"
@@ -151,32 +167,24 @@ export default {
                                 <div v-for="(detail, index) in form.details" :key="detail.id" class="row">
                                     <div class="mb-3 col">
                                         <label for="name">Item</label>
-                                        <input id="name" v-model="detail.item" type="text" name="untyped-input" class="form-control" />
+                                        <input disabled="disabled" id="name" v-model="detail.item_name" type="text" name="untyped-input" class="form-control" />
                                     </div>
 
                                     <div class="mb-3 col">
                                         <label for="name">Quantity</label>
-                                        <input @input="calculate(index)" id="name" v-model="detail.qty" type="text" name="untyped-input" class="form-control" />
+                                        <input disabled="disabled" @input="calculate(index)" id="name" v-model="detail.quantity" type="text" name="untyped-input" class="form-control" />
                                     </div>
 
                                     <div class="mb-3 col">
                                         <label for="name">Price</label>
-                                        <input @input="calculate(index)" id="name" v-model="detail.price" type="text" name="untyped-input" class="form-control" />
+                                        <input disabled="disabled" @input="calculate(index)" id="name" v-model="detail.price" type="text" name="untyped-input" class="form-control" />
                                     </div>
 
                                     <div class="mb-3 col">
                                         <label for="name">Subtotal</label>
-                                        <input id="name" v-model="detail.subtotal" type="text" name="untyped-input" class="form-control" />
+                                        <input disabled="disabled" id="name" v-model="detail.subtotal" type="text" name="untyped-input" class="form-control" />
                                     </div>
 
-                                    <div class="col align-self-center">
-                                        <button type="button" class="btn btn-primary" value="Delete" @click="deleteRow(index)"> Delete </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-success btn-block" @click="AddformData">Add New Row</button>
                                 </div>
                             </div>
                         </div>
@@ -190,19 +198,6 @@ export default {
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12 mt-4">
-                            <div>
-                                <b-button variant="light" @click="$router.back()">
-                                    Cancel
-                                </b-button>
-                                <b-button variant="primary" @click="submit">
-                                    Submit
-                                </b-button>
-                            </div>
-                            
-                        </div>
-                    </div>
                 </div>
             </div>
             <!-- end -->

@@ -27,35 +27,35 @@ export default {
       sortDesc: false,
       fields: [
         {
-          key: "patient",
+          key: "code",
+          label: "Billing Code",
+          sortable: true
+        },
+        {
+          key: "name",
           label: "Patient",
           sortable: true
         },
         {
-          key: "ipd",
-          label: "IPD",
+          key: "type",
+          label: "Type",
           sortable: true
         },
         {
-          key: "item",
-          label: "Item",
+          key: "total_amount",
+          label: "Total Amount",
           sortable: true
         },
         {
-          key: "subtotal",
-          label: "Subtotal",
+          key: "billing_date",
+          label: "Billing Date",
           sortable: true
         },
         {
-          key: "tax",
-          label: "Tax",
+          key: "action",
+          label: "Action",
           sortable: true
         },
-        {
-          key: "total",
-          label: "Total",
-          sortable: true
-        }
       ]
     };
   },
@@ -77,7 +77,7 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/appointment`;
+        const url = `${process.env.apiBaseUrl}/billing`;
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;
@@ -95,11 +95,11 @@ export default {
     },
 
     create() {
-      this.$router.push(`/appointment/create`);
+      this.$router.push(`/billing/create`);
     },
 
     move(id) {
-      this.$router.push(`/appointment/${id}/edit`);
+      this.$router.push(`/billing/${id}/view`);
     },
 
     confirm(id) {
@@ -113,9 +113,9 @@ export default {
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          const url = `${process.env.apiBaseUrl}/appointment/delete/${id}`;
+          const url = `${process.env.apiBaseUrl}/billing/delete/${id}`;
           await this.$axios.$post(url).then(() => {
-            Swal.fire("Deleted!", "Appointment has been deleted.", "success");
+            Swal.fire("Deleted!", "billing has been deleted.", "success");
             this.get_data();
           });
         }
@@ -136,7 +136,7 @@ export default {
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12 col-md-12">
-                <div v-if="userRole === 'Cashier'">
+                <div v-if="userRole === 'Cashier' || userRole === 'Super Admin'">
                   <b-button variant="success" @click="create">
                     <i class="mdi mdi-plus-thick me-2"></i>
                     Create Billing
@@ -169,16 +169,19 @@ export default {
                 :filter-included-fields="filterOn"
                 @filtered="onFiltered"
               >
+              <template #cell(total_amount)="row">
+                <span>${{ row.item.total_amount }}</span>
+              </template>
                 <template #cell(action)="row">
-                  <b-button
-                    variant="warning"
+                  <b-button v-if="userRole === 'Cashier' || userRole === 'Super Admin' || userRole === 'Patient'"
+                    variant="info"
                     size="sm"
                     @click="move(row.item.id)"
                     class="mr-2"
                   >
-                    Edit
+                    View
                   </b-button>
-                  <b-button
+                  <b-button v-if="userRole === 'Cashier' || userRole === 'Super Admin'"
                     variant="danger"
                     size="sm"
                     @click="confirm(row.item.id)"
