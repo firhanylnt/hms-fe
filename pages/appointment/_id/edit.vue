@@ -34,7 +34,7 @@ export default {
     methods: {
         async get_appointment(){
             try {
-                const url = `${process.env.apiBaseUrl}/appointment/${this.$route.params.id}`
+                const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.form.patient_id = { id: res.patient_id, name: res.patient_first_name + ' ' + res.patient_last_name };
@@ -125,7 +125,7 @@ export default {
             this.form.patient_id = this.form.patient_id.id
             this.form.doctor_id = this.form.doctor_id.id
 
-            const url = `${process.env.apiBaseUrl}/appointment/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
                     this.$router.push(`/appointment`)

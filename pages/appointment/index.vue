@@ -32,9 +32,19 @@ export default {
           sortable: true
         },
         {
-          key: "patient",
+          key: "patient_name",
           label: "Patient",
           sortable: true
+        },
+        {
+          key: "email",
+          label: "Patient Email",
+          sortable: false
+        },
+        {
+          key: "phone_number",
+          label: "Patient Phone Number",
+          sortable: false
         },
         {
           key: "doctor",
@@ -47,13 +57,13 @@ export default {
           sortable: true
         },
         {
-          key: "date",
+          key: "appointment_date",
           label: "Date",
           sortable: true
         },
         {
-          key: "payment",
-          label: "Payment Method",
+          key: "is_approved",
+          label: "Status",
           sortable: true
         },
         {
@@ -81,7 +91,7 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/appointment`;
+        const url = `${process.env.apiBaseUrl}/appointments`;
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;
@@ -117,7 +127,7 @@ export default {
         confirmButtonText: "Yes, delete it!"
       }).then(async result => {
         if (result.value) {
-          const url = `${process.env.apiBaseUrl}/appointment/delete/${id}`;
+          const url = `${process.env.apiBaseUrl}/appointments/delete/${id}`;
           await this.$axios.$post(url).then(() => {
             Swal.fire("Deleted!", "Appointment has been deleted.", "success");
             this.get_data();
@@ -177,6 +187,16 @@ export default {
                 :filter-included-fields="filterOn"
                 @filtered="onFiltered"
               >
+                <template v-slot:cell(doctor)="data">
+                  <span>{{ data.value === null || data.value === '' ? '-' : data.value }}</span>
+                </template>
+                <template v-slot:cell(appointment_date)="data">
+                  <span>{{ new Date(data.value) }}</span>
+                </template>
+                <template v-slot:cell(is_approved)="data">
+                  <span>{{ data.value ? 'Approved' : 'Not Approved Yet' }}</span>
+                </template>
+
                 <template #cell(action)="row">
                   <b-button
                     variant="warning"

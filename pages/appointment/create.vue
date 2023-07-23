@@ -86,7 +86,7 @@ export default {
             this.form.patient_id = this.form.patient_id.id
             this.form.doctor_id = this.form.doctor_id.id
 
-            const url = `${process.env.apiBaseUrl}/appointment`
+            const url = `${process.env.apiBaseUrl}/appointments`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
                     this.$router.push(`/appointment`)
