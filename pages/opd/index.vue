@@ -36,11 +36,6 @@ export default {
           sortable: true
         },
         {
-          key: "room",
-          label: "Room Number",
-          sortable: true
-        },
-        {
           key: "date",
           label: "Admission Date",
           sortable: true
@@ -71,7 +66,7 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/ipd`;
+        const url = `${process.env.apiBaseUrl}/opd`;
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;

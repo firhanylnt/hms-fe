@@ -13,6 +13,7 @@ export default {
     return {
       title: "Appointment",
       userRole: "",
+      user: null,
       tableData: [],
       totalRows: 1,
       currentPage: 1,
@@ -76,6 +77,7 @@ export default {
   mounted: function() {
     const userRoles = JSON.parse(localStorage.getItem("user"));
     this.userRole = userRoles.role;
+    this.user = userRoles
   },
   computed: {
     /**
@@ -91,7 +93,11 @@ export default {
   methods: {
     async get_data() {
       try {
-        const url = `${process.env.apiBaseUrl}/appointments`;
+        let user = JSON.parse(localStorage.getItem("user"));
+        let url = `${process.env.apiBaseUrl}/appointments`;
+        if (user.role != 'Super Admin' && user.role != 'Receptionist') {
+          url += `?user_id=${user.id}`;
+        }
         await this.$axios.$get(url).then(res => {
           console.log(res);
           this.tableData = res;

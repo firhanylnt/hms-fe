@@ -24,35 +24,23 @@ export default {
             searchVoucher: false,
             vmessage: null,
             sortDesc: false,
+            form: {
+                description: null,
+                report_date: null,
+                created_by: null,
+            },
             fields: [
                 {
-                    key: "id",
-                    label: "IPD ID",
+                    key: "report_date",
+                    label: "Date",
+                    thStyle: "min-width: 150px",
                     sortable: true,
                 },
                 {
-                    key: "patient",
-                    label: "Patient",
+                    key: "description",
+                    label: "Description",
+                    thStyle: "min-width: 250px",
                     sortable: true,
-                },
-                {
-                    key: "room",
-                    label: "Room Number",
-                    sortable: true,
-                },
-                {
-                    key: "date",
-                    label: "Admission Date",
-                    sortable: true,
-                },
-                {
-                    key: "status",
-                    label: "Status",
-                    sortable: true,
-                },
-                {
-                    label: "Action",
-                    key: 'action'
                 },
             ],
         };
@@ -66,12 +54,12 @@ export default {
         }
     },
     created() {
-        this.get_data()
+        this.get_medicine()
     },
     methods: {
-        async get_data(){
+        async get_medicine(){
             try {
-                const url = `${process.env.apiBaseUrl}/ipd`
+                const url = `${process.env.apiBaseUrl}/ipd/medicine/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     console.log(res);
@@ -91,38 +79,20 @@ export default {
             this.currentPage = 1;
         },
 
-        create(){
-            this.$router.push(`/ipd/create`)
-        },
+        async submit() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            this.form.created_by = user.id;
+            const url = `${process.env.apiBaseUrl}/ipd/add-medicine/${this.$route.params.id}`
+            await this.$axios.$post(url, this.form)
+            .then((res) => {
+                this.get_medicine()
+                this.form.description = null;
+                this.form.report_date = null;
+                this.form.created_by = null;
+                this.$bvModal.hide('add-medicine')
+            })
+        }
 
-        move(id) {
-            this.$router.push(`/ipd/${id}/edit`)
-        },
-
-        view(id) {
-            this.$router.push(`/ipd/${id}/view`)
-        },
-
-        confirm(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#34c38f",
-                cancelButtonColor: "#f46a6a",
-                confirmButtonText: "Yes, delete it!"
-            }).then(async result => {
-                if (result.value) {
-                    const url = `${process.env.apiBaseUrl}/ipd/delete/${id}`
-                    await this.$axios.$post(url)
-                    .then(() => {
-                        Swal.fire("Deleted!", "IPD has been deleted.", "success");
-                        this.get_data()
-                    })
-                }
-            });
-        },
     },
     middleware: "authentication",
 };
@@ -130,8 +100,6 @@ export default {
 
 <template>
 <div>
-    <PageHeader :title="title" />
-
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -139,34 +107,16 @@ export default {
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div>
-                                <b-button variant="success" @click="create">
+                                <b-button v-b-modal.add-medicine variant="success">
                                     <i class="mdi mdi-plus-thick me-2"></i>
-                                    Create IPD Patient
+                                    Add Medicine
                                 </b-button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mt-4">
-                        <div class="col-sm-12 col-md-4">
-                            <div>
-                                <b-form-input v-model="filter" type="search" placeholder="Search"></b-form-input>
                             </div>
                         </div>
                     </div>
                     <!-- Table -->
                     <div class="table-responsive mb-0 mt-4" >
                         <b-table :items="tableData" :fields="fields" responsive="sm" :per-page="perPage" :current-page="currentPage" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :filter="filter" :filter-included-fields="filterOn" @filtered="onFiltered">
-                            <template #cell(action)="row">
-                                <b-button variant="info" size="sm" @click="view(row.item.id)" class="mr-2">
-                                    View
-                                </b-button>
-                                <b-button variant="warning" size="sm" @click="move(row.item.id)" class="mr-2">
-                                    Edit
-                                </b-button>
-                                <b-button variant="danger" size="sm" @click="confirm(row.item.id)" class="mr-2">
-                                    Delete
-                                </b-button>
-                            </template>
                         </b-table>
                     </div>
                     <div class="row">
@@ -191,6 +141,31 @@ export default {
             </div>
         </div>
     </div>
+
+    <b-modal id="add-medicine" size="lg"  centered scrollable title="Add medicine" title-class="font-18" hide-footer>
+        <div class="row mb-4">
+            <div class="col">
+                <div class="mb-3">
+                    <label>Report Date</label>
+                    <input v-model="form.report_date" type="date" class="form-control" placeholder="Report Date"/>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col">
+                <label>Description</label>
+                <textarea class="form-control" v-model="form.description" rows="6" placeholder="paracetamol 4 tablet, 3x1"></textarea>
+            </div>
+        </div>
+        <div class="row float-end">
+            <div class="col">
+                <b-button class="w-md" variant="success" @click="submit">
+                    Submit
+                </b-button>
+            </div>
+            
+        </div>
+    </b-modal>
 
 </div>
 </template>

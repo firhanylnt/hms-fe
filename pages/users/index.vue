@@ -81,7 +81,6 @@ export default {
                 .then((res) => {
                     console.log(res);
                     this.tableData = res
-                    
                 })
                 // Handle the JSON data
             } catch (error) {
