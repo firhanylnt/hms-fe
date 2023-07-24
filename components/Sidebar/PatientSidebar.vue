@@ -29,5 +29,11 @@
         <span>Track Record Medical</span>
       </nuxt-link>
     </li>
+    <li>
+      <nuxt-link to="/meals" class="side-nav-link-ref">
+        <i class="mdi mdi-food"></i>
+        <span>Meals Ordering System</span>
+      </nuxt-link>
+    </li>
   </ul>
 </template>

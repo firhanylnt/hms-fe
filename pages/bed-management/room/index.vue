@@ -46,6 +46,11 @@ export default {
                     sortable: true,
                 },
                 {
+                    key: "price",
+                    label: "Price",
+                    sortable: true,
+                },
+                {
                     label: "Action",
                     key: 'action'
                 },

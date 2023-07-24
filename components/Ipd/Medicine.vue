@@ -258,7 +258,7 @@ export default {
             </div>
             <div class="col">
                 <div class="mb-3">
-                    <label>Qantity</label>
+                    <label>Quantity</label>
                     <input v-model="form.quantity" type="text" class="form-control" placeholder="Quantity"/>
                 </div>
             </div>
