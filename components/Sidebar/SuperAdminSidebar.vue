@@ -128,7 +128,7 @@ export default {
         "menu-nurses",
         "menu-invoices",
         "menu-users",
-        "menu-track-record",
+        "menu-track-record"
       ]
     };
 
@@ -320,11 +320,29 @@ export default {
       </ul>
     </li>
     <li class="li-menus" id="menu-medicines">
+      <a href="javascript:void(0);" class="is-parent has-dropdown">
+        <i class="uil uil-capsule"></i>
+        <span class="pt-2">Medicine</span>
+      </a>
+      <ul class="sub-menu" aria-expanded="false">
+        <li>
+          <nuxt-link to="/medicine" class="side-nav-link-ref">
+            <span>Medicine</span>
+          </nuxt-link>
+        </li>
+        <li>
+          <nuxt-link to="/medicine/category" class="side-nav-link-ref">
+            <span>Category</span>
+          </nuxt-link>
+        </li>
+      </ul>
+    </li>
+    <!-- <li class="li-menus" id="menu-medicines">
       <nuxt-link to="/medicine" class="side-nav-link-ref">
         <i class="uil uil-capsule"></i>
         <span>Medicine</span>
       </nuxt-link>
-    </li>
+    </li> -->
     <li class="li-menus" id="menu-laboratory">
       <nuxt-link to="/laboratory" class="side-nav-link-ref">
         <i class="fas fa-flask"></i>
