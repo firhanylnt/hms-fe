@@ -6,7 +6,7 @@ export default {
     layout: "auth",
     head() {
         return {
-            title: `${this.title} | HMS`
+            title: `${this.title} | Dimedic`
         };
     },
     data() {

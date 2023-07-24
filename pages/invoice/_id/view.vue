@@ -5,7 +5,7 @@
 export default {
     head() {
         return {
-            title: `${this.title} | HMS`,
+            title: `${this.title} | Dimedic`,
         };
     },
     data() {
@@ -241,7 +241,7 @@ export default {
                         </div>
                     </div>
 
-                    <div class="row" v-if="userRole === 'Cashier' || userRole === 'Super Admin'">
+                    <div class="row" v-if="userRole === 'Cashier'">
                         <div class="col-md-12 mt-4">
                             <div>
                                 <b-button variant="light" @click="$router.back()">

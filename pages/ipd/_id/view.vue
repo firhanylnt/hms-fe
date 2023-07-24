@@ -7,7 +7,7 @@ import Diagnosis from '../../../components/Ipd/Diagnosis.vue';
 export default {
     head() {
         return {
-            title: `${this.title} | HMS`,
+            title: `${this.title} | Dimedic`,
         };
     },
     components: { Overview, Medicine, Diagnosis }
