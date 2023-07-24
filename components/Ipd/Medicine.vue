@@ -1,5 +1,6 @@
 <script>
 import Swal from "sweetalert2";
+import moment from 'moment';
 /**
  * Dashboard component
  */
@@ -24,7 +25,11 @@ export default {
             searchVoucher: false,
             vmessage: null,
             sortDesc: false,
+            list_category: [],
+            list_medicine: [],
             form: {
+                medicine_category: null,
+                medicine_id: null,
                 description: null,
                 report_date: null,
                 created_by: null,
@@ -37,8 +42,26 @@ export default {
                     sortable: true,
                 },
                 {
-                    key: "description",
-                    label: "Description",
+                    key: "medicine_name",
+                    label: "Medicine",
+                    thStyle: "min-width: 250px",
+                    sortable: true,
+                },
+                {
+                    key: "category_name",
+                    label: "Medicine Category",
+                    thStyle: "min-width: 250px",
+                    sortable: true,
+                },
+                {
+                    key: "dosage",
+                    label: "Dosage",
+                    thStyle: "min-width: 250px",
+                    sortable: true,
+                },
+                {
+                    key: "instruction",
+                    label: "Instruction",
                     thStyle: "min-width: 250px",
                     sortable: true,
                 },
@@ -55,8 +78,38 @@ export default {
     },
     created() {
         this.get_medicine()
+        this.get_category()
     },
     methods: {
+        async get_category(){
+            try {
+                const url = `${process.env.apiBaseUrl}/medicine-categories`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.list_category = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_list_medicine(){
+            try {
+                const url = `${process.env.apiBaseUrl}/medicine/category/${this.form.medicine_category}`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    console.log(res);
+                    this.list_medicine = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
         async get_medicine(){
             try {
                 const url = `${process.env.apiBaseUrl}/ipd/medicine/${this.$route.params.id}`
@@ -71,6 +124,11 @@ export default {
                 console.error('Error fetching data:', error);
             }
             
+        },
+
+        tgl(e) {
+            const date = moment(e).format('DD MMM YYYY')
+            return date
         },
 
         onFiltered(filteredItems) {
@@ -117,6 +175,9 @@ export default {
                     <!-- Table -->
                     <div class="table-responsive mb-0 mt-4" >
                         <b-table :items="tableData" :fields="fields" responsive="sm" :per-page="perPage" :current-page="currentPage" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :filter="filter" :filter-included-fields="filterOn" @filtered="onFiltered">
+                            <template #cell(report_date)="row">
+                                {{ tgl(row.item.report_date) }}
+                            </template>
                         </b-table>
                     </div>
                     <div class="row">
@@ -151,12 +212,54 @@ export default {
                 </div>
             </div>
         </div>
+
         <div class="row mb-4">
             <div class="col">
-                <label>Description</label>
-                <textarea class="form-control" v-model="form.description" rows="6" placeholder="paracetamol 4 tablet, 3x1"></textarea>
+                <div class="mb-3">
+                    <label>Medicine Category</label>
+                    <v-select
+                        v-model="form.medicine_category" 
+                        :options="list_category"
+                        label="category_name" 
+                        :reduce="list_category => list_category.id"
+                        class="style-chooser"
+                        placeholder="Select Category"
+                        @input="get_list_medicine"
+                    >
+                    </v-select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label>Medicine</label>
+                    <v-select
+                        v-model="form.medicine_id" 
+                        :options="list_medicine"
+                        :label="'name'" 
+                        :reduce="list_medicine => list_medicine.id"
+                        class="style-chooser"
+                        placeholder="Select Medicine"
+                    >
+                    </v-select>
+                </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label>Dosage</label>
+                    <input v-model="form.dosage" type="text" class="form-control" placeholder="Dosage"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label>Instruction</label>
+                    <input v-model="form.instruction" type="text" class="form-control" placeholder="Instruction"/>
+                </div>
+            </div>
+        </div>
+
         <div class="row float-end">
             <div class="col">
                 <b-button class="w-md" variant="success" @click="submit">
