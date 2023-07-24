@@ -31,6 +31,11 @@ export default {
                     sortable: true,
                 },
                 {
+                    key: "medicine_category_name",
+                    label: "Category",
+                    sortable: true,
+                },
+                {
                     key: "name",
                     label: "Name",
                     sortable: true,

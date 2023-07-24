@@ -12,6 +12,7 @@ export default {
         return {
             title: "Create Medicine",
             form: {
+                medicine_category_id: null,
                 name: null,
                 brand: null,
                 price: null,
@@ -23,9 +24,25 @@ export default {
     },
     middleware: "authentication",
     created() {
+        this.get_list()
     },
     methods: {
+        async get_list(){
+            try {
+                const url = `${process.env.apiBaseUrl}/medicine-categories`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.list = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
         async submit() {
+            this.form.medicine_category_id = this.form.medicine_category_id.id
+
             const url = `${process.env.apiBaseUrl}/medicine`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
@@ -54,6 +71,22 @@ export default {
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
 
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Category</label>
+                                <v-select
+                                    v-model="form.medicine_category_id" 
+                                    :options="list" 
+                                    :label="'category_name'"
+                                    :value="'id'"
+                                    class="style-chooser"
+                                    placeholder="Select Category"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col">
