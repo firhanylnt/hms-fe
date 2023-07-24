@@ -45,25 +45,37 @@ export default {
                 const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    this.form.patient_id = { id: res.patient_id, name: res.patient_first_name + ' ' + res.patient_last_name };
-                    this.form.room_id = { id: res.room_id, number: res.room_number };
-                    this.form.room_type = res.room_type
-                    this.form.blood_pressure = res.blood_pressure
-                    this.form.height = res.height
-                    this.form.weight = res.weight
-                    this.form.payment_method = res.payment_method
-                    this.form.admission_date = this.convert_date(res.admission_date)
-                    this.form.symptoms = res.symptoms
-                    this.form.notes = res.notes
-                    this.form.is_active = res.is_active ? '1' : 0
-
-                    console.log('init form', this.form)
+                    this.form.patient_id = { id: res.ipd.patient_id, name: res.ipd.patient_first_name + ' ' + res.ipd.patient_last_name };
+                    this.form.blood_pressure = res.ipd.blood_pressure
+                    this.form.height = res.ipd.height
+                    this.form.weight = res.ipd.weight
+                    this.form.dob = this.convert_dob(res.ipd.patient_dob)
+                    this.form.gender = res.ipd.patient_gender
+                    this.form.payment_method = res.ipd.payment_method
+                    this.form.admission_date = this.convert_date(res.ipd.admission_date)
+                    this.form.symptoms = res.ipd.symptoms
+                    this.form.notes = res.ipd.notes
+                    this.form.is_active = res.ipd.is_active ? '1' : 0
                 })
                 // Handle the JSON data
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
             
+        },
+
+        convert_dob(e) {
+            const date = e === null ? new Date() : new Date(e)
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
+            const day = date.getUTCDate();
+            const localDatetime =
+            year +
+            '-' +
+            (month < 10 ? '0' + month.toString() : month) +
+            '-' +
+            (day < 10 ? '0' + day.toString() : day)
+            return localDatetime;
         },
 
         convert_date(e) {
@@ -176,6 +188,7 @@ export default {
                             <div class="mb-3">
                                 <label>Patient</label>
                                 <v-select
+                                disabled="disabled"
                                     v-model="form.patient_id" 
                                     :options="list_patient"
                                     :label="'name'" 
@@ -191,6 +204,25 @@ export default {
                             </div>
                         </div>
                         <div class="col">
+                            <div class="mb-3">
+                                <label>Gender</label>
+                                <v-select
+                                disabled="disabled"
+                                    v-model="form.gender" 
+                                    :options="list_gender" 
+                                    class="style-chooser"
+                                    placeholder="Select Gender"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Date of Birth</label>
+                                <input disabled="disabled" v-model="form.dob" type="date" class="form-control" placeholder="Input name"/>
+                            </div>
+                        </div>
+                        <!-- <div class="col">
                             <div class="mb-3">
                                 <label>Room Type</label>
                                 <v-select
@@ -219,7 +251,7 @@ export default {
                                 >
                                 </v-select>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="row">
@@ -247,7 +279,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Admission Date</label>
-                                <input v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="ipd Date"/>
+                                <input disabled="disabled" v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="ipd Date"/>
                                 <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                             </div>
                         </div>
@@ -255,6 +287,7 @@ export default {
                             <div class="mb-3">
                                 <label>Payment Methods</label>
                                 <v-select
+                                
                                     v-model="form.payment_method" 
                                     :options="list_payment"
                                     class="style-chooser"
