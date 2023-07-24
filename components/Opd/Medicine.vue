@@ -12,7 +12,7 @@ export default {
     },
     data() {
         return {
-            title: "Ipd Patient",
+            title: "Opd Patient",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -120,7 +120,7 @@ export default {
 
         async get_medicine(){
             try {
-                const url = `${process.env.apiBaseUrl}/ipd/medicine/${this.$route.params.id}`
+                const url = `${process.env.apiBaseUrl}/opd/medicine/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     console.log(res);
@@ -148,7 +148,7 @@ export default {
         async submit() {
             const user = JSON.parse(localStorage.getItem("user"));
             this.form.created_by = user.id;
-            const url = `${process.env.apiBaseUrl}/ipd/add-medicine/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/opd/add-medicine/${this.$route.params.id}`
             await this.$axios.$post(url, this.form)
             .then((res) => {
                 this.get_medicine()

@@ -5,7 +5,7 @@
 export default {
     head() {
         return {
-            title: `${this.title} | HMS`,
+            title: `${this.title} | Dimedic`,
         };
     },
     data() {

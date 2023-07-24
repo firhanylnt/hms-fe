@@ -10,11 +10,9 @@ export default {
     },
     data() {
         return {
-            title: "IPD Patient",
+            title: "Opd Patient",
             form: {
                 patient_id: null,
-                room_id: null,
-                room_type: null,
                 blood_pressure: null,
                 height: null,
                 weight: null,
@@ -42,12 +40,10 @@ export default {
     methods: {
         async get_data(){
             try {
-                const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
+                const url = `${process.env.apiBaseUrl}/opd/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.form.patient_id = { id: res.patient_id, name: res.patient_first_name + ' ' + res.patient_last_name };
-                    this.form.room_id = { id: res.room_id, number: res.room_number };
-                    this.form.room_type = res.room_type
                     this.form.blood_pressure = res.blood_pressure
                     this.form.height = res.height
                     this.form.weight = res.weight
@@ -143,10 +139,10 @@ export default {
             this.form.room_id = this.form.room_id.id
             this.form.is_active = this.form.is_active == '1' ? true : false
 
-            const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/opd/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
                 .then((res) => {
-                    this.$router.push(`/ipd`)
+                    this.$router.push(`/opd`)
                 })
         }
     }
@@ -179,36 +175,6 @@ export default {
                                 </v-select>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Room Type</label>
-                                <v-select
-                                    disabled="disabled" v-model="form.room_type" 
-                                    :options="room_type"
-                                    label="type"
-                                    :reduce="room_type => room_type.type" 
-                                    class="style-chooser"
-                                    @input="get_list_room"
-                                    placeholder="Select type"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Room</label>
-                                <v-select
-                                    disabled="disabled" v-model="form.room_id" 
-                                    :options="list_room"
-                                    :label="'number'"
-                                    :value="'id'"
-                                    class="style-chooser"
-                                    placeholder="Select Room"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="row">
@@ -236,7 +202,7 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Admission Date</label>
-                                <input disabled="disabled" v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="ipd Date"/>
+                                <input disabled="disabled" v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="opd Date"/>
                                 <!-- <input disabled="disabled" v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                             </div>
                         </div>

@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 export default {
   head() {
     return {
-      title: `${this.title} | HMS`
+      title: `${this.title} | Dimedic`
     };
   },
   data() {
@@ -91,6 +91,10 @@ export default {
       this.$router.push(`/opd/${id}/edit`);
     },
 
+    view(id) {
+            this.$router.push(`/opd/${id}/view`)
+        },
+
     confirm(id) {
       Swal.fire({
         title: "Are you sure?",
@@ -159,6 +163,9 @@ export default {
                 @filtered="onFiltered"
               >
                 <template #cell(action)="row">
+                  <b-button variant="info" size="sm" @click="view(row.item.id)" class="mr-2">
+                    View
+                  </b-button>
                   <b-button
                     variant="warning"
                     size="sm"
