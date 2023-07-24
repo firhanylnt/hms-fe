@@ -34,7 +34,7 @@ export default {
     },
     methods: {
         async get_users(){
-            const arr = ['users','doctors','patients','appointment','nurses','bloods','rooms','ipd']
+            const arr = ['users','doctors','patients','appointments','nurses','bloods','rooms','ipd']
 
             arr.map(async (name) => {
                 const url = `${process.env.apiBaseUrl}/${name}`
@@ -49,7 +49,7 @@ export default {
                     if(name === 'patients'){
                         this.data.patients = res.length
                     }
-                    if(name === 'appointment'){
+                    if(name === 'appointments'){
                         this.data.appointment = res.length
                     }
                     if(name === 'nurses'){
