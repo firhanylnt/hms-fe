@@ -18,6 +18,7 @@ export default {
                 patients: null,
                 appointments: null,
                 invoice: 0,
+                trm: 0,
                 nurses: null,
                 bloods: null,
                 rooms: null,
@@ -35,7 +36,7 @@ export default {
     },
     methods: {
         async get_users(){
-            const arr = ['users','doctors','patients','appointments','nurses','bloods','rooms','ipd', 'invoice']
+            const arr = ['users','doctors','patients','appointments','nurses','bloods','rooms','ipd', 'invoice', 'trm']
 
             arr.map(async (name) => {
                 let url = `${process.env.apiBaseUrl}/${name}`
@@ -45,7 +46,7 @@ export default {
                         url += `?email=${user.email}`;
                     }
                 }
-                if (name === 'invoice') {
+                if (name === 'invoice' || name === 'trm') {
                     if (user.role == 'Patient') {
                         url += `/${user.id}`;
                     }
@@ -78,6 +79,9 @@ export default {
                     }
                     if(name === 'invoice'){
                         this.data.invoice = res.length
+                    }
+                    if(name === 'trm'){
+                        this.data.trm = res.length
                     }
                 })
             })
@@ -123,6 +127,23 @@ export default {
                             </span>
                         </h4>
                         <p class="text-muted mb-0">Invoice</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-end mt-2">
+                        <img width="50" src="~/assets/images/icon/medical-appointment.png">
+                    </div>
+                    <div>
+                        <h4 class="mb-1 mt-1">
+                            <span data-plugin="counterup">
+                                {{data.trm}}
+                            </span>
+                        </h4>
+                        <p class="text-muted mb-0">TRM</p>
                     </div>
                 </div>
             </div>
