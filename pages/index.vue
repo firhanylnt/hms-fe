@@ -17,6 +17,7 @@ export default {
                 doctors: null,
                 patients: null,
                 appointments: null,
+                invoice: 0,
                 nurses: null,
                 bloods: null,
                 rooms: null,
@@ -34,10 +35,21 @@ export default {
     },
     methods: {
         async get_users(){
-            const arr = ['users','doctors','patients','appointments','nurses','bloods','rooms','ipd']
+            const arr = ['users','doctors','patients','appointments','nurses','bloods','rooms','ipd', 'invoice']
 
             arr.map(async (name) => {
-                const url = `${process.env.apiBaseUrl}/${name}`
+                let url = `${process.env.apiBaseUrl}/${name}`
+                const user = JSON.parse(localStorage.getItem("user"));
+                if (name === 'appointments') {
+                    if (user.role == 'Patient') {
+                        url += `?email=${user.email}`;
+                    }
+                }
+                if (name === 'invoice') {
+                    if (user.role == 'Patient') {
+                        url += `/${user.id}`;
+                    }
+                }
                 await this.$axios.$get(url)
                 .then((res) => {
                     if(name === 'users'){
@@ -50,7 +62,7 @@ export default {
                         this.data.patients = res.length
                     }
                     if(name === 'appointments'){
-                        this.data.appointment = res.length
+                        this.data.appointments = res.length
                     }
                     if(name === 'nurses'){
                         this.data.nurses = res.length
@@ -64,6 +76,9 @@ export default {
                     if(name === 'ipd'){
                         this.data.ipd = res.length
                     }
+                    if(name === 'invoice'){
+                        this.data.invoice = res.length
+                    }
                 })
             })
             
@@ -76,6 +91,43 @@ export default {
 <template>
 <div>
     <PageHeader :title="title" />
+
+    <div class="row mt-2" v-if="userRole === 'Patient'">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-end mt-2">
+                        <img width="50" src="~/assets/images/icon/medical-appointment.png">
+                    </div>
+                    <div>
+                        <h4 class="mb-1 mt-1">
+                            <span data-plugin="counterup">
+                                {{data.appointments}}
+                            </span>
+                        </h4>
+                        <p class="text-muted mb-0">Appointment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-end mt-2">
+                        <img width="50" src="~/assets/images/icon/medical-appointment.png">
+                    </div>
+                    <div>
+                        <h4 class="mb-1 mt-1">
+                            <span data-plugin="counterup">
+                                {{data.invoice}}
+                            </span>
+                        </h4>
+                        <p class="text-muted mb-0">Invoice</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row mt-2" v-if="userRole !== 'Patient'">
         <!--  -->
@@ -142,7 +194,7 @@ export default {
                     <div>
                         <h4 class="mb-1 mt-1">
                             <span data-plugin="counterup">
-                                {{data.appointment}}
+                                {{data.appointments}}
                             </span>
                         </h4>
                         <p class="text-muted mb-0">Appointment</p>
