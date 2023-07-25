@@ -23,6 +23,7 @@ export default {
                 symptoms: null,
                 notes: null,
                 is_active: null,
+                details: []
             },
             list: [],
             list_gender: ['Male', 'Female'],
@@ -34,10 +35,10 @@ export default {
     },
     middleware: "authentication",
     async created() {
-        await this.get_data()
-        this.get_list_patient()
         this.get_room_type()
         this.get_list_room()
+        this.get_list_patient()
+        this.get_data()
     },
     methods: {
         async get_data(){
@@ -56,6 +57,19 @@ export default {
                     this.form.symptoms = res.ipd.symptoms
                     this.form.notes = res.ipd.notes
                     this.form.is_active = res.ipd.is_active ? '1' : 0
+
+                    res.room.map(async (v) => {
+                        const type = await this.room_type.find(o => o.id === v.room_type_id)
+                        await this.get_list_room(null, type.type)
+                        const room = this.list_room.find(x => x.id === v.room_id)
+                        const arr = {
+                            room_type: type,
+                            room_id: room,
+                            start_date: this.convert_dob(v.start_date),
+                            end_date: v.end_date !== null ? this.convert_dob(v.end_date) : null,
+                        }
+                        this.form.details.push(arr)
+                    })
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -126,6 +140,7 @@ export default {
                 const url = `${process.env.apiBaseUrl}/room-types`
                 await this.$axios.$get(url)
                 .then((res) => {
+                    console.log(res);
                     this.room_type = res
                 })
                 // Handle the JSON data
@@ -135,9 +150,9 @@ export default {
             
         },
 
-        async get_list_room(){
+        async get_list_room(e, type){
             try {
-                const url = `${process.env.apiBaseUrl}/rooms?roomType=${this.form.room_type}`
+                const url = `${process.env.apiBaseUrl}/rooms?roomType=${e !== null ? this.form.details[e].room_type : type}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     console.log('list room', res)
@@ -150,9 +165,22 @@ export default {
             
         },
 
+        AddformData() {
+            this.form.details.push({
+                room_type: "",
+                room_id: "",
+                start_date: "",
+                end_date: "",
+            });
+        },
+
+        deleteRow(index) {
+            if (confirm("Are you sure you want to delete this element?"))
+                this.form.details.splice(index, 1);
+        },
+
         async submit() {
             this.form.patient_id = this.form.patient_id.id
-            this.form.room_id = this.form.room_id.id
             this.form.is_active = this.form.is_active == '1' ? true : false
 
             const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
@@ -222,36 +250,6 @@ export default {
                                 <input disabled="disabled" v-model="form.dob" type="date" class="form-control" placeholder="Input name"/>
                             </div>
                         </div>
-                        <!-- <div class="col">
-                            <div class="mb-3">
-                                <label>Room Type</label>
-                                <v-select
-                                    v-model="form.room_type" 
-                                    :options="room_type"
-                                    label="type"
-                                    :reduce="room_type => room_type.type" 
-                                    class="style-chooser"
-                                    @input="get_list_room"
-                                    placeholder="Select type"
-                                >
-                                </v-select>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="mb-3">
-                                <label>Room</label>
-                                <v-select
-                                    v-model="form.room_id" 
-                                    :options="list_room"
-                                    :label="'number'"
-                                    :value="'id'"
-                                    class="style-chooser"
-                                    placeholder="Select Room"
-                                >
-                                </v-select>
-                            </div>
-                        </div> -->
                     </div>
 
                     <div class="row">
@@ -309,6 +307,63 @@ export default {
                         <div class="col">
                             <label>Notes</label>
                             <textarea class="form-control" v-model="form.notes" rows="6"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h4>Room Details</h4>
+                            <div class="row mt-4">
+                                <div v-for="(detail, index) in form.details" :key="detail.id" class="row">
+                                    <div class="mb-3 col">
+                                        <label>Room Type</label>
+                                        <v-select
+                                            v-model="detail.room_type" 
+                                            :options="room_type"
+                                            label="type"
+                                            :reduce="room_type => room_type.type" 
+                                            class="style-chooser"
+                                            @input="get_list_room(index)"
+                                            placeholder="Select type"
+                                        >
+                                        </v-select>
+                                    </div>
+
+                                    <div class="mb-3 col">
+                                        <label>Room</label>
+                                        <v-select
+                                            v-model="detail.room_id" 
+                                            :options="list_room"
+                                            label="number"
+                                            :reduce="list_room => list_room.id"
+                                            class="style-chooser"
+                                            placeholder="Select Room"
+                                        >
+                                        </v-select>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>Start Date</label>
+                                            <input v-model="detail.start_date" type="date" class="form-control" placeholder="Input name"/>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="mb-3">
+                                            <label>End Date</label>
+                                            <input v-model="detail.end_date" type="date" class="form-control" placeholder="Input name"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="col align-self-center mt-2">
+                                        <button type="button" class="btn btn-primary" value="Delete" @click="deleteRow(index)"> Delete </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-success btn-block" @click="AddformData">Room Transfer</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
