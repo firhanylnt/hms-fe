@@ -21,7 +21,8 @@ export default {
         total_amount: null,
         details: [],
         status: null,
-        payment_method: null
+        payment_method: null,
+        code: null,
       },
       list_type: ["IPD", "OPD"],
       list_payment: ["Individual", "Insurance"],
@@ -45,6 +46,7 @@ export default {
         await this.$axios.$get(url).then(res => {
           this.form.patient_id = res.invoice.patient_id;
           this.form.type = res.invoice.type;
+          this.form.code = res.invoice.code
           this.form.total_amount = res.invoice.total_amount;
           this.form.status = res.invoice.status === false ? "Pending" : "Paid";
           this.form.payment_method = res.invoice.payment_method;
@@ -111,6 +113,10 @@ export default {
 
     generatePDF() {
       this.$refs.html2Pdf.generatePdf();
+    },
+
+    onProgress(){
+      setTimeout(this.$router.back(), 5)
     }
   }
 };
@@ -136,7 +142,7 @@ export default {
           :enable-download="true"
           :preview-modal="true"
           :paginate-elements-by-height="1400"
-          filename="nightprogrammerpdf"
+          :filename="'invoice-'+form.code"
           :pdf-quality="2"
           :manual-pagination="false"
           pdf-format="a4"
