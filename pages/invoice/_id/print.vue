@@ -136,14 +136,13 @@ export default {
           :enable-download="true"
           :preview-modal="true"
           :paginate-elements-by-height="1400"
-          filename="nightprogrammerpdf"
+          filename="invoice"
           :pdf-quality="2"
           :manual-pagination="false"
           pdf-format="a4"
           :pdf-margin="10"
           pdf-orientation="portrait"
           pdf-content-width="800px"
-          @progress="onProgress($event)"
           ref="html2Pdf"
         >
           <section slot="pdf-content">
