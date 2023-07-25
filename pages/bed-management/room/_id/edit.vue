@@ -5,7 +5,7 @@
 export default {
     head() {
         return {
-            title: `${this.title} | HMS`,
+            title: `${this.title} | Dimedic`,
         };
     },
     data() {
@@ -15,6 +15,7 @@ export default {
                 room_type_id: null,
                 room_number: null,
                 slot: null,
+                price: null,
             },
             list: [],
         };
@@ -47,6 +48,7 @@ export default {
                     this.form.room_type_id = res.type
                     this.form.room_number = res.number
                     this.form.slot = res.slot
+                    this.form.price = res.price
                 })
                 // Handle the JSON data
             } catch (error) {
@@ -104,6 +106,12 @@ export default {
                     </div>
 
                     <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Price</label>
+                                <input v-model="form.price" type="text" class="form-control" placeholder="Input Price"/>
+                            </div>
+                        </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label>Type</label>

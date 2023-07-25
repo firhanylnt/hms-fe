@@ -10,11 +10,9 @@ export default {
     },
     data() {
         return {
-            title: "Edit opd Patient",
+            title: "Opd Patient",
             form: {
                 patient_id: null,
-                room_id: null,
-                room_type: null,
                 blood_pressure: null,
                 height: null,
                 weight: null,
@@ -46,8 +44,6 @@ export default {
                 await this.$axios.$get(url)
                 .then((res) => {
                     this.form.patient_id = { id: res.patient_id, name: res.patient_first_name + ' ' + res.patient_last_name };
-                    this.form.room_id = { id: res.room_id, number: res.room_number };
-                    this.form.room_type = res.room_type
                     this.form.blood_pressure = res.blood_pressure
                     this.form.height = res.height
                     this.form.weight = res.weight
@@ -157,26 +153,15 @@ export default {
 <div>
     <div class="row">
         <div class="col-12">
-            <div class="row">
-                <div class="col-sm-12 col-md-4 mb-3">
-                    <b-button variant="light" @click="$router.back()">
-                        <i class="mdi mdi-arrow-left-bold-outline me-2"></i>
-                        Back
-                    </b-button>
-                </div>
-            </div>
 
-            <!-- detail -->
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
-
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
                                 <label>Patient</label>
                                 <v-select
-                                    v-model="form.patient_id" 
+                                    disabled="disabled" v-model="form.patient_id" 
                                     :options="list_patient"
                                     :label="'name'" 
                                     :value="'id'" 
@@ -196,19 +181,19 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Blood Pressure</label>
-                                <input v-model="form.blood_pressure" type="text" class="form-control" placeholder="Blood Pressure"/>
+                                <input disabled="disabled" v-model="form.blood_pressure" type="text" class="form-control" placeholder="Blood Pressure"/>
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label>Height</label>
-                                <input v-model="form.height" type="text" class="form-control" placeholder="Height"/>
+                                <input disabled="disabled" v-model="form.height" type="text" class="form-control" placeholder="Height"/>
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label>Weight</label>
-                                <input v-model="form.weight" type="text" class="form-control" placeholder="Weight"/>
+                                <input disabled="disabled" v-model="form.weight" type="text" class="form-control" placeholder="Weight"/>
                             </div>
                         </div>
                     </div>
@@ -217,15 +202,15 @@ export default {
                         <div class="col">
                             <div class="mb-3">
                                 <label>Admission Date</label>
-                                <input v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="opd Date"/>
-                                <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
+                                <input disabled="disabled" v-model="form.admission_date" type="datetime-local" class="form-control" placeholder="opd Date"/>
+                                <!-- <input disabled="disabled" v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-3">
                                 <label>Payment Methods</label>
                                 <v-select
-                                    v-model="form.payment_method" 
+                                    disabled="disabled" v-model="form.payment_method" 
                                     :options="list_payment"
                                     class="style-chooser"
                                     placeholder="Select Payment Method"
@@ -238,46 +223,19 @@ export default {
                     <div class="row">
                         <div class="col">
                             <label>Symptoms</label>
-                            <textarea class="form-control" v-model="form.symptoms" rows="6"></textarea>
+                            <textarea class="form-control" disabled="disabled" v-model="form.symptoms" rows="6"></textarea>
                         </div>
                     </div>
 
                     <div class="row mt-3">
                         <div class="col">
                             <label>Notes</label>
-                            <textarea class="form-control" v-model="form.notes" rows="6"></textarea>
+                            <textarea class="form-control" disabled="disabled" v-model="form.notes" rows="6"></textarea>
                         </div>
                     </div>
 
-                    <div class="row mt-3">
-                        <label>Status</label>
-                        <div class="col-md-12">
-                            <b-form-checkbox
-                            v-model="form.is_active"
-                            class="mb-3"
-                            plain
-                            value="1"
-                            unchecked-value="0"
-                            >Active</b-form-checkbox>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 mt-4">
-                            <div>
-                                <b-button variant="light" @click="$router.back()">
-                                    Cancel
-                                </b-button>
-                                <b-button variant="primary" @click="submit">
-                                    Submit
-                                </b-button>
-                            </div>
-                            
-                        </div>
-                    </div>
                 </div>
             </div>
-            <!-- end -->
         </div>
     </div>
     

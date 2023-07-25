@@ -1,5 +1,6 @@
 <script>
 import Swal from "sweetalert2";
+import moment from 'moment';
 /**
  * Dashboard component
  */
@@ -11,7 +12,7 @@ export default {
     },
     data() {
         return {
-            title: "IPD Patient",
+            title: "Opd Patient",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -20,14 +21,20 @@ export default {
             filter: null,
             filterOn: [],
             // sortBy: "id",
+            searchmodal: null,
+            searchVoucher: false,
+            vmessage: null,
             sortDesc: false,
-            list_doctor: [],
+            list_category: [],
+            list_medicine: [],
             form: {
-                doctor_id: null,
-                diagnosis: null,
+                medicine_category: null,
+                medicine_id: null,
+                dosage: null,
                 instruction: null,
                 report_date: null,
                 created_by: null,
+                quantity: null,
             },
             fields: [
                 {
@@ -37,15 +44,27 @@ export default {
                     sortable: true,
                 },
                 {
-                    key: "doctor",
-                    label: "Doctor",
+                    key: "medicine_name",
+                    label: "Medicine",
                     thStyle: "min-width: 150px",
                     sortable: true,
                 },
                 {
-                    key: "diagnosis",
-                    label: "Diagnosis",
-                    thStyle: "min-width: 250px",
+                    key: "category_name",
+                    label: "Medicine Category",
+                    thStyle: "min-width: 150px",
+                    sortable: true,
+                },
+                {
+                    key: "quantity",
+                    label: "Quantity",
+                    thStyle: "min-width: 50px",
+                    sortable: true,
+                },
+                {
+                    key: "dosage",
+                    label: "Dosage",
+                    thStyle: "min-width: 150px",
                     sortable: true,
                 },
                 {
@@ -66,13 +85,42 @@ export default {
         }
     },
     created() {
-        this.get_diagnosis()
-        this.get_list_doctor()
+        this.get_medicine()
+        this.get_category()
     },
     methods: {
-        async get_diagnosis(){
+        async get_category(){
             try {
-                const url = `${process.env.apiBaseUrl}/ipd/diagnosis/${this.$route.params.id}`
+                const url = `${process.env.apiBaseUrl}/medicine-categories`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.list_category = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_list_medicine(){
+            try {
+                const url = `${process.env.apiBaseUrl}/medicine/category/${this.form.medicine_category}`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    console.log(res);
+                    this.list_medicine = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
+        async get_medicine(){
+            try {
+                const url = `${process.env.apiBaseUrl}/opd/medicine/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
                     console.log(res);
@@ -86,18 +134,9 @@ export default {
             
         },
 
-        async get_list_doctor(){
-            try {
-                const url = `${process.env.apiBaseUrl}/doctors`
-                await this.$axios.$get(url)
-                .then((res) => {
-                    this.list_doctor = res
-                })
-                // Handle the JSON data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-            
+        tgl(e) {
+            const date = moment(e).format('DD MMM YYYY')
+            return date
         },
 
         onFiltered(filteredItems) {
@@ -109,16 +148,19 @@ export default {
         async submit() {
             const user = JSON.parse(localStorage.getItem("user"));
             this.form.created_by = user.id;
-            const url = `${process.env.apiBaseUrl}/ipd/add-diagnosis/${this.$route.params.id}`
+            const url = `${process.env.apiBaseUrl}/opd/add-medicine/${this.$route.params.id}`
             await this.$axios.$post(url, this.form)
             .then((res) => {
-                this.get_diagnosis()
-                this.form.doctor_id = null;
-                this.form.diagnosis = null;
-                this.form.instruction = null;
+                this.get_medicine()
+                this.form.medicine_category = null;
+                this.form.medicine_id = null;
+                this.form.description = null;
                 this.form.report_date = null;
                 this.form.created_by = null;
-                this.$bvModal.hide('add-diagnosis')
+                this.form.quantity = null;
+                this.form.dosage = null;
+                this.form.instruction = null;
+                this.$bvModal.hide('add-medicine')
             })
         }
 
@@ -136,9 +178,9 @@ export default {
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div>
-                                <b-button v-b-modal.add-diagnosis variant="success">
+                                <b-button v-b-modal.add-medicine variant="success">
                                     <i class="mdi mdi-plus-thick me-2"></i>
-                                    Add Diagnosis
+                                    Add Medicine
                                 </b-button>
                             </div>
                         </div>
@@ -146,6 +188,9 @@ export default {
                     <!-- Table -->
                     <div class="table-responsive mb-0 mt-4" >
                         <b-table :items="tableData" :fields="fields" responsive="sm" :per-page="perPage" :current-page="currentPage" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :filter="filter" :filter-included-fields="filterOn" @filtered="onFiltered">
+                            <template #cell(report_date)="row">
+                                {{ tgl(row.item.report_date) }}
+                            </template>
                         </b-table>
                     </div>
                     <div class="row">
@@ -171,42 +216,69 @@ export default {
         </div>
     </div>
 
-    <b-modal id="add-diagnosis" size="lg"  centered scrollable title="Add Diagnosis" title-class="font-18" hide-footer>
+    <b-modal id="add-medicine" size="lg"  centered scrollable title="Add medicine" title-class="font-18" hide-footer>
         <div class="row mb-4">
             <div class="col">
                 <div class="mb-3">
                     <label>Report Date</label>
                     <input v-model="form.report_date" type="date" class="form-control" placeholder="Report Date"/>
-                    <!-- <input v-model="form.dob" type="date" class="form-control" placeholder="Input name"/> -->
                 </div>
             </div>
+        </div>
+
+        <div class="row mb-4">
             <div class="col">
                 <div class="mb-3">
-                    <label>Doctor</label>
+                    <label>Medicine Category</label>
                     <v-select
-                        v-model="form.doctor_id" 
-                        :options="list_doctor"
-                        :label="'name'" 
-                        :reduce="list_doctor => list_doctor.id"
+                        v-model="form.medicine_category" 
+                        :options="list_category"
+                        label="category_name" 
+                        :reduce="list_category => list_category.id"
                         class="style-chooser"
-                        placeholder="Select Docter"
+                        placeholder="Select Category"
+                        @input="get_list_medicine"
                     >
                     </v-select>
                 </div>
             </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label>Medicine</label>
+                    <v-select
+                        v-model="form.medicine_id" 
+                        :options="list_medicine"
+                        :label="'name'" 
+                        :reduce="list_medicine => list_medicine.id"
+                        class="style-chooser"
+                        placeholder="Select Medicine"
+                    >
+                    </v-select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label>Qantity</label>
+                    <input v-model="form.quantity" type="text" class="form-control" placeholder="Quantity"/>
+                </div>
+            </div>
         </div>
+
         <div class="row">
             <div class="col">
-                <label>Diagnosis</label>
-                <textarea class="form-control" v-model="form.diagnosis" rows="6"></textarea>
+                <div class="mb-3">
+                    <label>Dosage</label>
+                    <input v-model="form.dosage" type="text" class="form-control" placeholder="Dosage"/>
+                </div>
             </div>
-        </div>
-        <div class="row mb-4">
             <div class="col">
-                <label>Instruction</label>
-                <textarea class="form-control" v-model="form.instruction" rows="6"></textarea>
+                <div class="mb-3">
+                    <label>Instruction</label>
+                    <input v-model="form.instruction" type="text" class="form-control" placeholder="Instruction"/>
+                </div>
             </div>
         </div>
+
         <div class="row float-end">
             <div class="col">
                 <b-button class="w-md" variant="success" @click="submit">

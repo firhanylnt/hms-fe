@@ -241,7 +241,7 @@ export default {
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-appointment">
-      <a href="javascript:void(0);" class="is-parent has-dropdown">
+      <a href="javascript:void(0);" class="is-parent has-arrow">
         <i class="uil-clipboard-notes"></i>
         <span class="pt-2">Appointment</span>
       </a>

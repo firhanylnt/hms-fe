@@ -1,36 +1,38 @@
-<script>
-/**
- * Dashboard component
- */
-export default {
-    head() {
-        return {
-            title: `${this.title} | HMS`,
-        };
-    },
-    data() {
-        return {
-            title: "Dashboard",
-        };
-    },
-    middleware: "authentication",
-};
-</script>
-
 <template>
-<div>
-    <div class="text-center">
-        <div>
-            <div class="row justify-content-center">
-                <div class="col-sm-4">
-                    <div class="error-img">
-                        <img src="~/assets/images/qrcode.svg" alt class="img-fluid mx-auto d-block" />
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div>
+      <button @click="scanBarcode">Scan Barcode</button>
+      <div v-if="result">{{ result }}</div>
     </div>
-</div>
-</template>
-
-<style></style>
+  </template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        result: null,
+      };
+    },
+    methods: {
+      async scanBarcode() {
+        try {
+          const videoDevices = await this.$codeReader.listVideoInputDevices();
+          if (videoDevices && videoDevices.length > 0) {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: {
+                deviceId: videoDevices[0].deviceId,
+              },
+            });
+            const result = await this.$codeReader.decodeFromStream(stream, 'video');
+            this.result = result.getText();
+            stream.getTracks().forEach((track) => track.stop());
+          } else {
+            console.error('No video input devices found.');
+          }
+        } catch (error) {
+          console.error('Error scanning barcode:', error);
+        }
+      },
+    },
+  };
+  </script>
+  

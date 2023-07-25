@@ -7,12 +7,12 @@ import moment from 'moment';
 export default {
     head() {
         return {
-            title: `${this.title} | HMS`,
+            title: `${this.title} | Dimedic`,
         };
     },
     data() {
         return {
-            title: "IPD Patient",
+            title: "Ipd Patient",
             tableData: [],
             totalRows: 1,
             currentPage: 1,
@@ -30,9 +30,11 @@ export default {
             form: {
                 medicine_category: null,
                 medicine_id: null,
-                description: null,
+                dosage: null,
+                instruction: null,
                 report_date: null,
                 created_by: null,
+                quantity: null,
             },
             fields: [
                 {
@@ -44,19 +46,25 @@ export default {
                 {
                     key: "medicine_name",
                     label: "Medicine",
-                    thStyle: "min-width: 250px",
+                    thStyle: "min-width: 150px",
                     sortable: true,
                 },
                 {
                     key: "category_name",
                     label: "Medicine Category",
-                    thStyle: "min-width: 250px",
+                    thStyle: "min-width: 150px",
+                    sortable: true,
+                },
+                {
+                    key: "quantity",
+                    label: "Quantity",
+                    thStyle: "min-width: 50px",
                     sortable: true,
                 },
                 {
                     key: "dosage",
                     label: "Dosage",
-                    thStyle: "min-width: 250px",
+                    thStyle: "min-width: 150px",
                     sortable: true,
                 },
                 {
@@ -144,9 +152,14 @@ export default {
             await this.$axios.$post(url, this.form)
             .then((res) => {
                 this.get_medicine()
+                this.form.medicine_category = null;
+                this.form.medicine_id = null;
                 this.form.description = null;
                 this.form.report_date = null;
                 this.form.created_by = null;
+                this.form.quantity = null;
+                this.form.dosage = null;
+                this.form.instruction = null;
                 this.$bvModal.hide('add-medicine')
             })
         }
@@ -241,6 +254,12 @@ export default {
                         placeholder="Select Medicine"
                     >
                     </v-select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label>Quantity</label>
+                    <input v-model="form.quantity" type="text" class="form-control" placeholder="Quantity"/>
                 </div>
             </div>
         </div>

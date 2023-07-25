@@ -277,7 +277,7 @@ export default {
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-doctors">
-      <a href="javascript:void(0);" class="is-parent has-dropdown">
+      <a href="javascript:void(0);" class="is-parent has-arrow">
         <i class="mdi mdi-doctor"></i>
         <span class="pt-2">Doctor</span>
       </a>
@@ -302,7 +302,7 @@ export default {
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-bed-management">
-      <a href="javascript:void(0);" class="is-parent has-dropdown">
+      <a href="javascript:void(0);" class="is-parent has-arrow">
         <i class="uil uil-bed"></i>
         <span class="pt-2">Bed Management</span>
       </a>
@@ -320,7 +320,7 @@ export default {
       </ul>
     </li>
     <li class="li-menus" id="menu-medicines">
-      <a href="javascript:void(0);" class="is-parent has-dropdown">
+      <a href="javascript:void(0);" class="is-parent has-arrow">
         <i class="uil uil-capsule"></i>
         <span class="pt-2">Medicine</span>
       </a>

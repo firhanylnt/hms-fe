@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 export default {
     head() {
         return {
-            title: `${this.title} | HMS`,
+            title: `${this.title} | Dimedic`,
         };
     },
     data() {
@@ -43,6 +43,11 @@ export default {
                 {
                     key: "slot",
                     label: "Slot",
+                    sortable: true,
+                },
+                {
+                    key: "price",
+                    label: "Price",
                     sortable: true,
                 },
                 {

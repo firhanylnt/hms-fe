@@ -1,9 +1,7 @@
 <script>
 
-import Appointment from '../../components/Trm/Appointment.vue';
-
-import History from '../../components/Trm/History.vue';
-
+import Overview from '../../../components/Opd/Overview.vue';
+import Medicine from '../../../components/Opd/Medicine.vue';
 
 export default {
     head() {
@@ -11,7 +9,7 @@ export default {
             title: `${this.title} | Dimedic`,
         };
     },
-    components: { Appointment, History }
+    components: { Overview, Medicine }
 };
 </script>
 
@@ -38,18 +36,18 @@ export default {
                                 <span class="d-inline-block d-sm-none">
                                     <i class="fas fa-home"></i>
                                 </span>
-                                <span class="d-none d-sm-inline-block">Appointment</span>
+                                <span class="d-none d-sm-inline-block">Overview</span>
                             </template>
-                           <Appointment />
+                           <Overview />
                         </b-tab>
                         <b-tab>
                             <template v-slot:title>
                                 <span class="d-inline-block d-sm-none">
-                                    <i class="far fa-user"></i>
+                                    <i class="far fa-envelope"></i>
                                 </span>
-                                <span class="d-none d-sm-inline-block">IPD/OPD</span>
+                                <span class="d-none d-sm-inline-block">Medicine</span>
                             </template>
-                            <History />
+                            <Medicine />
                         </b-tab>
                     </b-tabs>
                 </div>
