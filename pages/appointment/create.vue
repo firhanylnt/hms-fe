@@ -14,11 +14,13 @@ export default {
     return {
       title: "Create Appointment",
       form: {
+        patient_id: null,
         doctor_id: null,
         specialization_id: null,
         email: null,
         phone_number: null,
-        patient_name: null,
+        first_name: null,
+        last_name: null,
         patient_gender: null,
         appointment_date: null,
         description: null,
@@ -27,6 +29,7 @@ export default {
       list: [],
       list_gender: ["Male", "Female"],
       list_specialization: [],
+      list_patient: [],
       list_doctor: [],
       list_status: ["Approved", "Not Approved Yet"]
     };
@@ -34,13 +37,43 @@ export default {
   middleware: "authentication",
   created() {
     this.get_list_specialization();
+    this.get_list_patient();
   },
   methods: {
+    async get_list_patient() {
+      try {
+        const url = `${process.env.apiBaseUrl}/patients`;
+        await this.$axios.$get(url).then(res => {
+          this.list_patient = res;
+        });
+        // Handle the JSON data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
     async get_list_specialization() {
       try {
         const url = `${process.env.apiBaseUrl}/specialization`;
         await this.$axios.$get(url).then(res => {
           this.list_specialization = res;
+        });
+        // Handle the JSON data
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
+    async autofill_user_information() {
+      try {
+        const url = `${process.env.apiBaseUrl}/patients/${this.form.patient_id.id}`;
+        await this.$axios.$get(url).then(res => {
+          console.log('sel patient', res)
+
+          this.form.first_name = res.first_name
+          this.form.last_name = res.last_name
+          this.form.patient_gender = res.gender
+          this.form.phone_number = res.phone
         });
         // Handle the JSON data
       } catch (error) {
@@ -67,7 +100,7 @@ export default {
           text:
             this.form.doctor_id.name +
             " will handle Appointment by " +
-            this.form.patient_name +
+            this.form.first_name + " " + this.form.last_name +
             " at " +
             this.form.appointment_date,
           icon: "warning",
@@ -89,12 +122,12 @@ export default {
           }
         });
       } else {
+        this.form.patient_id = this.form.patient_id.id
         this.form.specialization_id = this.form.specialization_id.id
         this.form.doctor_id = this.form.doctor_id.id
         this.form.is_approved = this.form.is_approved == 'Approved' ? true : false
 
         console.log('form', this.form)
-
         const url = `${process.env.apiBaseUrl}/appointments`;
         await this.$axios.$post(url, this.form).then(res => {
           this.$router.push(`/appointment`);
@@ -127,11 +160,40 @@ export default {
               <div class="col">
                 <div class="mb-3">
                   <label>Patient</label>
+                  <v-select
+                    v-model="form.patient_id"
+                    :options="list_patient"
+                    :label="'first_name'"
+                    :value="'id'"
+                    class="style-chooser"
+                    @input="autofill_user_information"
+                    placeholder="Select user"
+                  >
+                  </v-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="mb-3">
+                  <label>Patient First Name</label>
                   <input
-                    v-model="form.patient_name"
+                    v-model="form.first_name"
                     type="text"
                     class="form-control"
-                    placeholder="Patien Name"
+                    placeholder="Patien First Name"
+                  />
+                </div>
+              </div>
+              <div class="col">
+                <div class="mb-3">
+                  <label>Patient Last Name</label>
+                  <input
+                    v-model="form.last_name"
+                    type="text"
+                    class="form-control"
+                    placeholder="Patien Last Name"
                   />
                 </div>
               </div>

@@ -14,6 +14,7 @@ export default {
     return {
       title: "Edit Appointment",
       form: {
+        patient_id: null,
         doctor_id: null,
         email: null,
         phone_number: null,
@@ -49,6 +50,7 @@ export default {
       try {
         const url = `${process.env.apiBaseUrl}/appointments/${this.$route.params.id}`;
         await this.$axios.$get(url).then(res => {
+          this.form.patient_id = res.patient_id;
           this.form.patient_name = res.patient_name;
           this.form.email = res.email;
           this.form.phone_number = res.phone_number;
