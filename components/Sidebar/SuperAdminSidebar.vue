@@ -127,6 +127,7 @@ export default {
         "menu-pharmacists",
         "menu-nurses",
         "menu-invoices",
+        "menu-facility",
         "menu-users",
         "menu-track-record"
       ]
@@ -274,6 +275,13 @@ export default {
         <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-invoice"></i>
         <span>Invoice</span>
+      </nuxt-link>
+    </li>
+    <li class="li-menus" id="menu-facility">
+      <nuxt-link to="/facility " class="side-nav-link-ref">
+        <!-- <i class="fas fa-home"></i> -->
+        <i class="uil uil-shop"></i>
+        <span>Facility</span>
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-doctors">

@@ -203,7 +203,7 @@ export default {
                   <div class="card-body">
                     <h4>invoice Details</h4>
                     <div class="row mt-4">
-                      <table>
+                      <table class="invoice-table">
                         <thead>
                           <tr class="text-center">
                             <th>Item</th>
@@ -280,9 +280,7 @@ export default {
   height: fit-content;
 }
 
-table,
-th,
-td {
+.invoice-table th, .invoice-table td {
   border: 1px solid black;
   padding: 4px;
 }
