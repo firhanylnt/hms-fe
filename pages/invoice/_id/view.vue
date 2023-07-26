@@ -220,7 +220,7 @@ export default {
                     class="row"
                   >
                     <div class="mb-3 col">
-                      <label for="name">Item</label>
+                      <label for="name">Facility</label>
                       <input
                         disabled="disabled"
                         id="name"
