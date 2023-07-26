@@ -81,10 +81,6 @@ export default {
           sortable: true,
           thStyle: "min-width: 200px"
         },
-        {
-          label: "Action",
-          key: "action"
-        }
       ]
     };
   },
@@ -108,9 +104,12 @@ export default {
     async get_data() {
       try {
         let user = JSON.parse(localStorage.getItem("user"));
-        let url = `${process.env.apiBaseUrl}/appointments`;
+        let url = `${process.env.apiBaseUrl}/appointments?`;
         if (user.role != 'Super Admin' && user.role != 'Receptionist') {
-          url += `?user_id=${user.id}`;
+          url += `user_id=${user.id}&`;
+        }
+        if (user.role == 'Patient') {
+          url += `email=${user.email}`
         }
         await this.$axios.$get(url).then(res => {
           console.log(res);
