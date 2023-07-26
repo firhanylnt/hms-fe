@@ -23,6 +23,7 @@ export default {
             sortDesc: false,
             list_doctor: [],
             form: {
+                main_doctor_id: null,
                 doctor_id: null,
                 diagnosis: null,
                 instruction: null,
@@ -66,10 +67,25 @@ export default {
         }
     },
     created() {
+        this.get_data()
         this.get_diagnosis()
         this.get_list_doctor()
     },
     methods: {
+        async get_data(){
+            try {
+                const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.form.main_doctor_id = { id: res.ipd.doctor_id, name: res.ipd.doctor_name };
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
         async get_diagnosis(){
             try {
                 const url = `${process.env.apiBaseUrl}/ipd/diagnosis/${this.$route.params.id}`
@@ -172,6 +188,23 @@ export default {
     </div>
 
     <b-modal id="add-diagnosis" size="lg"  centered scrollable title="Add Diagnosis" title-class="font-18" hide-footer>
+        <div class="row mb-4">
+            <div class="col">
+                <div class="mb-3">
+                    <label>Main Doctor</label>
+                    <v-select
+                        v-model="form.main_doctor_id" 
+                        :options="list_doctor"
+                        :label="'name'" 
+                        :value="'id'" 
+                        class="style-chooser"
+                        placeholder="Select Main Docter"
+                        disabled
+                    >
+                    </v-select>
+                </div>
+            </div>
+        </div>
         <div class="row mb-4">
             <div class="col">
                 <div class="mb-3">

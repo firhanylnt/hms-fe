@@ -12,6 +12,7 @@ export default {
         return {
             title: "Edit IPD Patient",
             form: {
+                doctor_id: null,
                 patient_id: null,
                 room_id: null,
                 room_type: null,
@@ -30,6 +31,7 @@ export default {
             list_patient: [],
             room_type: [],
             list_room: [],
+            list_doctor: [],
             list_payment: ['Individual', 'Insurance']
         };
     },
@@ -39,13 +41,40 @@ export default {
         this.get_list_room()
         this.get_list_patient()
         this.get_data()
+        this.get_list_doctors()
     },
     methods: {
+        formatDateToString(inputDate) {
+            const dateObject = new Date(inputDate);
+        
+            const year = dateObject.getFullYear();
+            const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1 and pad with '0' if needed
+            const day = String(dateObject.getDate()).padStart(2, '0');
+        
+            const formattedDate = `${year}-${month}-${day}`;
+            return formattedDate;
+        },
+
+        async get_list_doctors(){
+            try {
+                const url = `${process.env.apiBaseUrl}/doctors`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.list_doctor = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        },
+
         async get_data(){
             try {
                 const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
+                    this.form.room_id = res.ipd.room_id
+                    this.form.doctor_id = { id: res.ipd.doctor_id, name: res.ipd.doctor_name };
                     this.form.patient_id = { id: res.ipd.patient_id, name: res.ipd.patient_first_name + ' ' + res.ipd.patient_last_name };
                     this.form.blood_pressure = res.ipd.blood_pressure
                     this.form.height = res.ipd.height
@@ -180,6 +209,7 @@ export default {
         },
 
         async submit() {
+            this.form.doctor_id = this.form.doctor_id.id
             this.form.patient_id = this.form.patient_id.id
             this.form.is_active = this.form.is_active == '1' ? true : false
 
@@ -210,6 +240,27 @@ export default {
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Doctor</label>
+                                <v-select
+                                    v-model="form.doctor_id" 
+                                    :options="list_doctor"
+                                    :label="'name'" 
+                                    :value="'id'" 
+                                    class="style-chooser"
+                                    placeholder="Select main doctor"
+                                >
+                                <template #option="{ name, id }">
+                                    {{ name }} ({{ id }})
+                                </template>
+
+                                </v-select>
+                            </div>
+                        </div>
+                    </div> 
 
                     <div class="row">
                         <div class="col">
