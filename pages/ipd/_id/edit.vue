@@ -73,6 +73,7 @@ export default {
                 const url = `${process.env.apiBaseUrl}/ipd/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
+                    this.form.room_id = res.ipd.room_id
                     this.form.doctor_id = { id: res.ipd.doctor_id, name: res.ipd.doctor_name };
                     this.form.patient_id = { id: res.ipd.patient_id, name: res.ipd.patient_first_name + ' ' + res.ipd.patient_last_name };
                     this.form.blood_pressure = res.ipd.blood_pressure
