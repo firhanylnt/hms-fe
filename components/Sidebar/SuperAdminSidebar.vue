@@ -278,7 +278,7 @@ export default {
       </nuxt-link>
     </li>
     <li class="li-menus" id="menu-facility">
-      <nuxt-link to="/facility " class="side-nav-link-ref">
+      <nuxt-link to="/facility" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-shop"></i>
         <span>Facility</span>
