@@ -31,13 +31,13 @@ export default {
                     sortable: true,
                 },
                 {
-                    key: "patient",
-                    label: "Patient",
+                    key: "doctor_name",
+                    label: "Main Doctor",
                     sortable: true,
                 },
                 {
-                    key: "room",
-                    label: "Room Number",
+                    key: "patient",
+                    label: "Patient",
                     sortable: true,
                 },
                 {

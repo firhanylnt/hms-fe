@@ -12,6 +12,7 @@ export default {
         return {
             title: "Create IPD Patient",
             form: {
+                doctor_id: null,
                 patient_id: null,
                 room_id: null,
                 blood_pressure: null,
@@ -28,6 +29,7 @@ export default {
             list_patient: [],
             room_type: [],
             list_room: [],
+            list_doctor: [],
             list_payment: ['Individual', 'Insurance']
         };
     },
@@ -35,8 +37,33 @@ export default {
     created() {
         this.get_list_patient()
         this.get_room_type()
+        this.get_list_doctors()
     },
     methods: {
+        formatDateToString(inputDate) {
+            const dateObject = new Date(inputDate);
+        
+            const year = dateObject.getFullYear();
+            const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so we add 1 and pad with '0' if needed
+            const day = String(dateObject.getDate()).padStart(2, '0');
+        
+            const formattedDate = `${year}-${month}-${day}`;
+            return formattedDate;
+        },
+
+        async get_list_doctors(){
+            try {
+                const url = `${process.env.apiBaseUrl}/doctors`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.list_doctor = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        },
+
         async get_list_patient(){
             try {
                 const url = `${process.env.apiBaseUrl}/patients`
@@ -89,6 +116,7 @@ export default {
         },
 
         async submit() {
+            this.form.doctor_id = this.form.doctor_id.id
             this.form.patient_id = this.form.patient_id.id
             this.form.room_id = this.form.room_id.id
             this.form.is_active = this.form.is_active == '1' ? true : false
@@ -124,6 +152,27 @@ export default {
                     <div class="row">
                         <div class="col">
                             <div class="mb-3">
+                                <label>Doctor</label>
+                                <v-select
+                                    v-model="form.doctor_id" 
+                                    :options="list_doctor"
+                                    :label="'name'" 
+                                    :value="'id'" 
+                                    class="style-chooser"
+                                    placeholder="Select main doctor"
+                                >
+                                <template #option="{ name, id }">
+                                    {{ name }} ({{ id }})
+                                </template>
+
+                                </v-select>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
                                 <label>Patient</label>
                                 <v-select
                                     v-model="form.patient_id" 
@@ -134,7 +183,7 @@ export default {
                                     placeholder="Select patient"
                                 >
                                 <template #option="{ name, dob }">
-                                    {{ name }} | {{ dob }}
+                                    {{ name }} | {{ formatDateToString(dob) }}
                                 </template>
 
                                 </v-select>
