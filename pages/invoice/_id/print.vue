@@ -206,7 +206,7 @@ export default {
                       <table class="invoice-table">
                         <thead>
                           <tr class="text-center">
-                            <th>Item</th>
+                            <th>Description</th>
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Subtotal</th>

@@ -13,21 +13,18 @@ export default {
             title: "Create invoice",
             form: {
                 patient_id: null,
+                service_id: null,
                 type: null,
                 total_amount: null,
                 payment_method: null,
                 status: null,
-                details: [{
-                    item: null,
-                    qty: null,
-                    price: null,
-                    subtotal: null,
-                }]
+                details: []
             },
             list_type: ['IPD','OPD'],
             list_payment: ['Individual','Insurance'],
             list_status: ['Pending','Paid'],
             list_patient: [],
+            list_ipdopd: []
         };
     },
     middleware: "authentication",
@@ -56,6 +53,89 @@ export default {
             
         },
 
+        async get_data() {
+            try {
+                const url = `${process.env.apiBaseUrl}/${this.form.type}/detail/${this.form.service_id}`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    if(res.facility){
+                        let total = null
+                        res.facility.map((v) => {
+                            const qty = v.quantity === 0 ? 1 : v.quantity
+                            total += qty
+                        })
+
+                        const subtotal = 30*total
+                        const arr = {
+                            item: 'Consultant',
+                            price: 30,
+                            qty: total,
+                            subtotal: subtotal,
+                        }
+                        this.form.details.push(arr);
+                    }
+
+                    if(this.form.type === 'OPD'){
+                        const arr = {
+                            item: 'Consultant',
+                            price: 30,
+                            qty: 1,
+                            subtotal: 30,
+                        }
+                        this.form.details.push(arr);
+                    }
+                    this.form.payment_method = res.detail.payment_method
+
+                    if(res.facility){
+                        console.log(res.facility)
+                        res.facility.map((v) => {
+                            const qty = v.quantity === 0 ? 1 : v.quantity
+
+                            const subtotal = v.price*qty
+                            const arr = {
+                                item: v.name,
+                                price: v.price,
+                                qty: qty,
+                                subtotal: subtotal,
+                            }
+                            this.form.details.push(arr);
+                        })
+                    }
+
+                    res.medicine.map((v) => {
+                        const qty = v.quantity === 0 ? 1 : v.quantity
+
+                        const subtotal = v.price*qty
+                        const arr = {
+                            item: v.name,
+                            price: v.price,
+                            qty: qty,
+                            subtotal: subtotal,
+                        }
+                        this.form.details.push(arr);
+                    })
+
+                    this.subtotal()
+                })
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        },
+
+        async choose_type() {
+            let url = '';
+            if(this.form.type === 'IPD'){
+                url = `${process.env.apiBaseUrl}/ipd/patient/${this.form.patient_id}`
+            }else{
+                url = `${process.env.apiBaseUrl}/opd/patient/${this.form.patient_id}`
+            }
+            await this.$axios.$get(url)
+            .then((res) => {
+                console.log(res);
+                this.list_ipdopd = res
+            })
+        },
+
         AddformData() {
             this.form.details.push({
                 item: "",
@@ -68,6 +148,20 @@ export default {
         deleteRow(index) {
             if (confirm("Are you sure you want to delete this element?"))
                 this.form.details.splice(index, 1);
+        },
+
+        convert_dob(e) {
+            const date = e === null ? new Date() : new Date(e)
+            const year = date.getUTCFullYear();
+            const month = date.getUTCMonth() + 1;
+            const day = date.getUTCDate();
+            const localDatetime =
+            year +
+            '-' +
+            (month < 10 ? '0' + month.toString() : month) +
+            '-' +
+            (day < 10 ? '0' + day.toString() : day)
+            return localDatetime;
         },
 
         calculate(i) {
@@ -122,15 +216,14 @@ export default {
                                 <v-select
                                     v-model="form.patient_id" 
                                     :options="list_patient"
-                                    :label="'name'" 
-                                    :reduce="list_patient => list_patient.id" 
+                                    label="name"
+                                    :reduce="list_patient => list_patient.id"
                                     class="style-chooser"
-                                    placeholder="Select patient"
+                                    placeholder="Select Patient"
                                 >
                                 <template #option="{ name, dob }">
-                                    {{ name }} | {{ dob }}
+                                    {{ name }} | {{ convert_dob(dob) }}
                                 </template>
-
                                 </v-select>
                             </div>
                         </div>
@@ -142,10 +235,30 @@ export default {
                                     :options="list_type"
                                     class="style-chooser"
                                     placeholder="Select type"
+                                    @input="choose_type"
                                 >
                                 </v-select>
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Ipd/Opd ID</label>
+                                <v-select
+                                    v-model="form.service_id" 
+                                    :options="list_ipdopd"
+                                    label="id"
+                                    :reduce="list_ipdopd => list_ipdopd.id"
+                                    class="style-chooser"
+                                    placeholder="Select ID"
+                                    @input="get_data"
+                                >
+                                <template #option="{ id, admission_date }">
+                                    {{ id }} | {{ convert_dob(admission_date) }}
+                                </template>
+                                </v-select>
+                            </div>
+                        </div>
+                        
                     </div>
 
                     <div class="row">
@@ -153,6 +266,7 @@ export default {
                             <div class="mb-3">
                                 <label>Payment Method</label>
                                 <v-select
+                                    disabled="disabled"
                                     v-model="form.payment_method" 
                                     :options="list_payment"
                                     class="style-chooser"
@@ -181,7 +295,7 @@ export default {
                             <div class="row mt-4">
                                 <div v-for="(detail, index) in form.details" :key="detail.id" class="row">
                                     <div class="mb-3 col">
-                                        <label for="name">Item</label>
+                                        <label for="name">Description</label>
                                         <input id="name" v-model="detail.item" type="text" name="untyped-input" class="form-control" />
                                     </div>
 
