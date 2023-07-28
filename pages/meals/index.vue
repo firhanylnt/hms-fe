@@ -1,38 +1,56 @@
 <template>
-    <div>
-      <button @click="scanBarcode">Scan Barcode</button>
-      <div v-if="result">{{ result }}</div>
+  <div id="app">
+    <div id="qr-code-full-region">{{ message.decodedResult }}</div>
+
+    <div
+      v-for="(msg, index) in message"
+      :key="index"
+      style="white-space: pre-line"
+    >
+      <pre> {{ msg.decodedResult.result.text }}</pre>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        result: null,
-      };
+  </div>
+</template>
+
+<script>
+import { Html5QrcodeScanner } from "html5-qrcode";
+export default {
+  data() {
+    return {
+      message: []
+    };
+  },
+  methods: {
+    creatScan() {
+      const config = { fps: 10, qrbox: 400 };
+      const html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-code-full-region",
+        config
+      );
+      html5QrcodeScanner.render(this.onScanSuccess);
     },
-    methods: {
-      async scanBarcode() {
-        try {
-          const videoDevices = await this.$codeReader.listVideoInputDevices();
-          if (videoDevices && videoDevices.length > 0) {
-            const stream = await navigator.mediaDevices.getUserMedia({
-              video: {
-                deviceId: videoDevices[0].deviceId,
-              },
-            });
-            const result = await this.$codeReader.decodeFromStream(stream, 'video');
-            this.result = result.getText();
-            stream.getTracks().forEach((track) => track.stop());
-          } else {
-            console.error('No video input devices found.');
-          }
-        } catch (error) {
-          console.error('Error scanning barcode:', error);
-        }
-      },
-    },
-  };
-  </script>
-  
+    onScanSuccess(decodedText, decodedResult) {
+      const obj = { decodedResult: decodedResult };
+      this.message.push(obj);
+    }
+  },
+  async mounted() {
+    this.creatScan();
+  }
+};
+</script>
+
+<style>
+video {
+  width: 40% !important;
+  margin: 0 auto;
+}
+
+#qr-shaded-region {
+  border-width: 0 318px !important;
+}
+
+#qr-code-full-region {
+  border: none !important;
+}
+</style>
