@@ -22,7 +22,11 @@ export default {
   },
   methods: {
     creatScan() {
-      const config = { fps: 10, qrbox: 400 };
+      const config = {
+        fps: 10,
+        qrbox: 400,
+        videoConstraints: { facingMode: { exact: "environment" } }
+      };
       const html5QrcodeScanner = new Html5QrcodeScanner(
         "qr-code-full-region",
         config
