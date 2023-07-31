@@ -33,6 +33,15 @@ export default {
       return this.$store && this.$store.state.notification ? 5 : 0;
     }
   },
+  mounted: function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const as = urlParams.get('as')
+
+    if (as != null) {
+      const role = as.charAt(0).toUpperCase() + as.slice(1);
+      document.getElementById('role-login').innerHTML = ' as a <b>' + role + '</b>'
+    }
+  },
   methods: {
     // Try to log the user in with the username
     // and password they provided.
@@ -116,7 +125,7 @@ export default {
               <div class="card-body p-4">
                 <div class="text-center mt-2">
                   <h5 class="text-primary">Welcome Back !</h5>
-                  <p class="text-muted">Sign in to continue to Dimedic.</p>
+                  <p class="text-muted">Sign in to continue to Dimedic<span id="role-login"></span>.</p>
                 </div>
                 <div class="p-2 mt-4">
                   <b-alert
