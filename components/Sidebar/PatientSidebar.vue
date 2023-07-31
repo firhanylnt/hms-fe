@@ -26,7 +26,7 @@
       <nuxt-link to="/track-record-medical" class="side-nav-link-ref">
         <!-- <i class="fas fa-home"></i> -->
         <i class="uil uil-medical-drip"></i>
-        <span>Track Record Medical</span>
+        <span>Track Medical Record</span>
       </nuxt-link>
     </li>
     <li>
