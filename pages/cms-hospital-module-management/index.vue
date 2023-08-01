@@ -11,7 +11,7 @@ export default {
   },
   data() {
     return {
-      title: "CMS Hospital Module Management",
+      title: "CMS Hospital Module",
       userRole: "",
       hospital: null,
       form: {
