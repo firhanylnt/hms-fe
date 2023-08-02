@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       menuItems: menuItems,
-      role: ""
+      role: "",
+      modules: []
     };
   },
   components: {
@@ -115,6 +116,9 @@ export default {
     });
 
     const user = JSON.parse(localStorage.getItem("user"));
+    this.modules = user.modules
+
+    console.log('modules', this.modules)
 
     const roles = {
       doctor: [
@@ -276,12 +280,24 @@ export default {
       <!--- Sidemenu -->
       <div id="sidebar-menu">
         <!-- Left Menu Start -->
-        <PatientSidebar v-if="role === 'Patient'" />
+        <!-- <PatientSidebar v-if="role === 'Patient'" />
         <CashierSidebar v-if="role === 'Cashier'" />
         <NurseSidebar v-if="role === 'Nurse'" />
         <ReceptionistSidebar v-if="role === 'Receptionist'" />
         <DoctorSidebar v-if="role === 'Doctor'" />
-        <SuperAdminSidebar v-if="role === 'Super Admin'" />
+        <SuperAdminSidebar v-if="role === 'Super Admin'" /> -->
+        <template>
+          <ul class="metismenu list-unstyled" id="side-menu">
+            <li class="menu-title">Menu</li>
+            <li v-for="module in modules" :key="module.id" class="li-menus" v-if="module.is_active && module.is_visible">
+              <nuxt-link :to="module.url_path" class="side-nav-link-ref">
+                <i :class="module.icon"></i>
+                <span>{{ module.module_name }}</span>
+              </nuxt-link>
+            </li>
+          </ul>
+        </template>
+
       </div>
       <!-- Sidebar -->
     </div>
