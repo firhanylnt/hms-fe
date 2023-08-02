@@ -27,7 +27,12 @@ export default {
             fields: [
                 {
                     key: "id",
-                    label: "Users ID",
+                    label: "User ID",
+                    sortable: true,
+                },
+                {
+                    key: "hospital_name",
+                    label: "Hospital",
                     sortable: true,
                 },
                 {

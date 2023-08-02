@@ -12,6 +12,7 @@ export default {
         return {
             title: "Edit User",
             form: {
+                hospital_id: null,
                 username: null,
                 email: null,
                 role: null,
@@ -19,20 +20,36 @@ export default {
                 created_at: null,
                 updated_at: null,
             },
+            list_hospital: [],
             list_role: ['Super Admin', 'Admin', 'Receptionist', 'Doctor', 'Nurse', 'Cashier', 'Patient']
         };
     },
     middleware: "authentication",
     created() {
         this.get_users()
+        this.get_list_hospital()
     },
     methods: {
+        async get_list_hospital(){
+            try {
+                const url = `${process.env.apiBaseUrl}/hospitals`
+                await this.$axios.$get(url)
+                .then((res) => {
+                    this.list_hospital = res
+                })
+                // Handle the JSON data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+            
+        },
+
         async get_users(){
             try {
                 const url = `${process.env.apiBaseUrl}/users/${this.$route.params.id}`
                 await this.$axios.$get(url)
                 .then((res) => {
-                    console.log(res);
+                    this.form.hospital_id = { id: res.hospital_id, name: res.hospital_name };
                     this.form.username = res.username
                     this.form.email = res.email
                     this.form.role = res.role
@@ -46,6 +63,7 @@ export default {
         },
 
         async submit() {
+            this.form.hospital_id = this.form.hospital_id.id
             this.form.updated_at = new Date()
             const url = `${process.env.apiBaseUrl}/users/${this.$route.params.id}`
                 await this.$axios.$post(url, this.form)
@@ -74,6 +92,23 @@ export default {
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title mt-2 mb-4">{{ title }}</h4>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label>Hospital</label>
+                                <v-select
+                                    v-model="form.hospital_id" 
+                                    :options="list_hospital" 
+                                    :label="'name'"
+                                    :value="'id'"
+                                    class="style-chooser"
+                                    placeholder="Select Hospital"
+                                >
+                                </v-select>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col">
