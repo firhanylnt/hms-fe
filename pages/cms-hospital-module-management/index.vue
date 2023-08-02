@@ -57,10 +57,15 @@ export default {
 
     async get_hospital() {
       try {
+        this.form.modules_id = []
+
         let url = `${process.env.apiBaseUrl}/hospitals/${this.form.hospital_id.id}`;
         await this.$axios.$get(url).then(res => {
           this.hospital = res;
-          this.form.modules_id = res.modules_id
+
+          for (let i = 0; i < res.modules.length; i++) {
+            this.form.modules_id.push(res.modules[i].module_id)
+          }
         });
         // Handle the JSON data
       } catch (error) {
