@@ -8,8 +8,8 @@ export default {
   layout: "auth",
   data() {
     return {
-      email: "admin@ultrabit.com",
-      password: "password",
+      email: "super_admin@dividefense.com",
+      password: "fajar123",
       submitted: false,
       authError: null,
       tryingToLogIn: false,
