@@ -3,3 +3,4 @@ yarn.lock
 .output
 .nuxt
 dist
+nuxt.config.js
